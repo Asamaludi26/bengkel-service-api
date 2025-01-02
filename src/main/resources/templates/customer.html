@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bengkel Service</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+    <h1 class="mt-5">Data Customer Sahabat Motor</h1>
+
+    <div class="d-flex justify-content-between mb-3">
+    <!-- Search Form -->
+    <form action="/customer/search" method="get" class="form-inline mb-3">
+        <input type="text" name="searchQuery" class="form-control mr-2" placeholder="Search by name" required />
+        <button type="submit" class="btn btn-primary">Search</button>
+        <button type="button" id="resetButton" class="btn btn-secondary ml-2">Reset</button>
+    </form>
+
+    <!-- Tombol Kembali ke Dashboard -->
+    <button type="button" id="homeButton" class="btn btn-primary" onclick="window.location.href='/'">Kembali ke Dashboard</button>
+    </div>
+
+    <!-- Form Tambah/Edit Customer -->
+    <h2 class="mt-4">Tambah/Edit Customer</h2>
+    <form action="/customer/save" method="post" th:object="${customer}">
+        <input type="hidden" th:field="*{id}" />
+        <div class="form-group">
+            <label for="nama">Nama</label>
+            <input type="text" class="form-control" id="nama" th:field="*{nama}" placeholder="Masukkan nama" required>
+        </div>
+        <div class="form-group">
+            <label for="alamat">Alamat</label>
+            <input type="text" class="form-control" id="alamat" th:field="*{alamat}" placeholder="Masukkan alamat" required>
+        </div>
+        <div class="form-group">
+            <label for="telepon">Nomor Telepon</label>
+            <input type="text" class="form-control" id="telepon" th:field="*{telepon}" placeholder="Masukkan nomor telepon" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Simpan</button>
+    </form>
+
+    <!-- Tabel Data Customer -->
+    <h2 class="mt-4">Data Customer</h2>
+    <table class="table table-striped mt-3">
+        <thead>
+        <tr>
+            <th>Nama</th>
+            <th>Alamat</th>
+            <th>Nomor Telepon</th>
+            <th>Aksi</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="customer : ${customerList}">
+            <td th:text="${customer.nama}"></td>
+            <td th:text="${customer.alamat}"></td>
+            <td th:text="${customer.telepon}"></td>
+            <td>
+                <!-- Tombol Edit -->
+                <a th:href="@{/customer/edit/{id}(id=${customer.id})}" class="btn btn-warning btn-sm">Edit</a>
+
+                <!-- Tombol Delete -->
+                <a th:href="@{/customer/delete/{id}(id=${customer.id})}" class="btn btn-danger btn-sm"
+                   onclick="return confirm('Yakin ingin menghapus data ini?')">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.getElementById('resetButton').addEventListener('click', function () {
+        // Arahkan ke endpoint untuk memuat semua data customer
+        window.location.href = '/customer/all';
+    });
+</script>
+
+</body>
+</html>

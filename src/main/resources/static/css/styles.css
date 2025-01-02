@@ -1,0 +1,120 @@
+/* Reset styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f7f9fc;
+    color: #333;
+}
+
+/* Navbar styles */
+
+.navbar {
+    display: flex;
+    align-items: center; /* Menyelarakan logo dan teks secara vertikal */
+    justify-content: flex-start; /* Menyusun logo dan teks dari kiri */
+    padding: 15px 20px;
+    color: #fff;
+    background-color: #007bff; /* Ganti dengan warna navbar sesuai keinginan */
+}
+
+.navbar .logo img {
+    width: 115px; /* Sesuaikan ukuran logo */
+    height: 60px; /* Sesuaikan ukuran logo */
+    margin-right: 10px; /* Memberikan jarak antara logo dan teks */
+}
+
+.navbar-text span {
+    font-size: 35px; /* Ukuran teks untuk nama bengkel */
+    color: #fff; /* Warna teks */
+}
+
+/* Dashboard container styles */
+.dashboard-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px;
+    gap: 20px;
+}
+
+/* Card styles */
+.card {
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    width: 300px;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.card img {
+    width: auto;
+    height: 120px; /* sesuaikan dengan tinggi yang diinginkan */
+    max-width: 100%; /* Membatasi lebar agar tidak melewati batas container */
+    object-fit: contain; /* Untuk menjaga rasio gambar tanpa merusak bentuknya */
+}
+
+.card h2 {
+    font-size: 20px;
+    margin: 15px 0;
+    color: #007bff;
+}
+
+.card p {
+    font-size: 14px;
+    color: #555;
+    margin: 0 15px 15px;
+}
+
+.card a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    margin-bottom: 15px;
+    transition: background-color 0.3s;
+}
+
+.card a:hover {
+    background-color: #0056b3;
+}
+
+/* Footer styles */
+.footer {
+    text-align: center;
+    padding: 15px;
+    background-color: #007bff;
+    color: #fff;
+    margin-top: 20px;
+}
+
+.footer p {
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .dashboard-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .card {
+        width: 90%;
+    }
+}

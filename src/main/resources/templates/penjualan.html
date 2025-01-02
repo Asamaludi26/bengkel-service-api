@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manajemen Sparepart</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+    <h1 class="mt-5">Manajemen Sparepart</h1>
+
+    <!-- Form Tambah/Edit Produk -->
+    <form action="/penjualan/save" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="namaProduk">Nama Produk</label>
+            <input type="text" class="form-control" id="namaProduk" name="namaProduk" placeholder="Masukkan nama produk" required>
+        </div>
+        <div class="form-group">
+            <label for="fotoProduk">Foto Produk</label>
+            <input type="file" class="form-control-file" id="fotoProduk" name="fotoProduk" accept="image/*" required>
+        </div>
+        <div class="form-group">
+            <label for="harga">Harga</label>
+            <input type="number" class="form-control" id="harga" name="harga" placeholder="Masukkan harga produk" required>
+        </div>
+        <div class="form-group">
+            <label for="stok">Stok</label>
+            <input type="number" class="form-control" id="stok" name="stok" placeholder="Masukkan stok produk" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Simpan</button>
+    </form>
+
+    <!-- Tabel Data Produk -->
+    <h2 class="mt-4">Daftar Produk</h2>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Nama</th>
+            <th>Foto</th>
+            <th>Harga</th>
+            <th>Stok</th>
+            <th>Aksi</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="produk : ${produkList}">
+            <td th:text="${produk.namaProduk}"></td>
+            <td>
+                <img th:src="@{'/images/uploads/' + ${produk.fotoProduk}}" alt="Foto Produk" class="img-thumbnail" style="width: 100px; height: auto;">
+            </td>
+            <td th:text="${produk.harga}"></td>
+            <td th:text="${produk.stok}"></td>
+            <td>
+                <a th:href="@{/penjualan/edit/{id}(id=${produk.id})}" class="btn btn-warning btn-sm">Edit</a>
+                <a th:href="@{/penjualan/delete/{id}(id=${produk.id})}" class="btn btn-danger btn-sm"
+                   onclick="return confirm('Yakin ingin menghapus data ini?')">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
