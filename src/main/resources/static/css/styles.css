@@ -1,4 +1,4 @@
-/* Reset styles */
+ /*Reset styles */
 * {
     margin: 0;
     padding: 0;
@@ -9,6 +9,16 @@ body {
     font-family: 'Arial', sans-serif;
     background-color: #f7f9fc;
     color: #333;
+
+    display: flex;
+    flex-direction: column; /* Mengatur arah flex menjadi kolom */
+    min-height: 100vh; /* Memastikan body memenuhi tinggi viewport */
+}
+
+/* Container */
+
+.container {
+    flex: 1; /* Membuat kontainer utama mengisi ruang yang tersisa */
 }
 
 /* Navbar styles */
@@ -34,17 +44,32 @@ body {
 }
 
 /* Dashboard container styles */
-.dashboard-container {
+.main-content{
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    padding: 20px;
-    gap: 20px;
+    justify-content: center; /* Pusatkan konten secara horizontal */
+    align-items: center; /* Pusatkan konten secara vertikal */
+}
+
+.dashboard-container {
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 kolom */
+    gap: 20px; /* Jarak antar kartu */
+    max-width: 1080px; /* Lebar maksimum kontainer */
+    width: 100%; /* Lebar kontainer 100% */
+    padding: 20px; /* Padding di dalam kontainer */
+
+    /*display: flex;*/
+    /*flex-wrap: wrap;*/
+    /*justify-content: center;*/
+    /*padding: 20px;*/
+    /*gap: 20px;*/
 }
 
 /* Card styles */
 .card {
     background-color: #fff;
+    align-items: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     overflow: hidden;
@@ -100,6 +125,7 @@ body {
     background-color: #007bff;
     color: #fff;
     margin-top: 20px;
+
 }
 
 .footer p {
@@ -108,24 +134,53 @@ body {
 }
 
 /* Responsive styles */
-@media (max-width: 768px) {
-    .dashboard-container {
-        flex-direction: column;
-        align-items: center;
-    }
 
-    .card {
-        width: 90%;
-    }
-}
+/*@media (max-width: 500px) {*/
+/*    .navbar{*/
+/*        padding: 5px 10px;*/
+/*    }*/
+
+/*    .navbar .logo img {*/
+/*        width: 75px; !* Sesuaikan ukuran logo *!*/
+/*        height: 40px; !* Sesuaikan ukuran logo *!*/
+/*        margin-right: 10px; !* Memberikan jarak antara logo dan teks *!*/
+/*    }*/
+
+/*    .navbar-text span {*/
+/*        font-size: 25px; !* Ukuran teks untuk nama bengkel *!*/
+/*        color: #fff; !* Warna teks *!*/
+/*    }*/
+
+/*    .dashboard-container {*/
+/*        display: grid;*/
+/*        grid-template-columns: 1fr; !* 1 kolom untuk layar kecil *!*/
+/*    }*/
+/*}*/
+
+/*@media (max-width: 600px) {*/
+/*    .card-container {*/
+/*        grid-template-columns: 1fr; !* 1 kolom untuk layar kecil *!*/
+/*    }*/
+/*}*/
+/*@media (max-width: 768px) {*/
+/*    .dashboard-container {*/
+/*        flex-direction: column;*/
+/*        align-items: center;*/
+/*    }*/
+
+/*    .card {*/
+/*        width: 90%;*/
+/*    }*/
+/*}*/
 
 @media (min-width: 1025px) {
     .dashboard-container {
-        flex-direction: row;
-        align-items: center;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* 2 kolom */
+        /*grid-template-columns: 1fr; !* 1 kolom untuk layar kecil *!*/
     }
 
     .card {
-        width: 25%;
+        width: 100%;
     }
 }
