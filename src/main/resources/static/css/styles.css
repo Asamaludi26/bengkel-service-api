@@ -118,3 +118,14 @@ body {
         width: 90%;
     }
 }
+
+@media (min-width: 1025px) {
+    .dashboard-container {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .card {
+        width: 25%;
+    }
+}

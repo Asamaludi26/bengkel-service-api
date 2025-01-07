@@ -1,13 +1,13 @@
 package com.bengkelservice.model;
 
-import jakarta.persistence.Table;
+import org.springframework.web.multipart.MultipartFile;
+
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.Column;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
-import org.springframework.web.multipart.MultipartFile;
 
 @Entity
 @Table(name = "penjualan_produk")
