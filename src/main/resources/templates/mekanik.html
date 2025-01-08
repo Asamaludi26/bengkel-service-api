@@ -1,43 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Mekanik</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Metadata dasar -->
+    <meta charset="UTF-8"> <!-- Menentukan encoding karakter halaman -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Membuat tampilan responsif -->
+    <title>Data Mekanik</title> <!-- Judul halaman -->
+
+    <!-- Menghubungkan file CSS -->
+    <link rel="stylesheet" href="/css/styles2.css"> <!-- File CSS khusus -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> <!-- Bootstrap CSS -->
 </head>
 <body>
 
+<!-- Navigasi -->
+<nav class="navbar">
+    <div class="logo">
+        <img src="/images/logo_bengkel4.png" alt="Logo Bengkel" /> <!-- Logo bengkel -->
+        <div class="navbar-text">Bengkel Sahabat Motor</div> <!-- Nama bengkel -->
+    </div>
+</nav>
+
+<!-- Kontainer Utama -->
 <div class="container">
+    <!-- Judul Halaman -->
     <h1 class="mt-5">Data Mekanik</h1>
 
+    <!-- Form Pencarian dan Tombol Kembali -->
     <div class="d-flex justify-content-between mb-3">
-    <!-- Search Form -->
-    <form action="/mekanik/search" method="get" class="form-inline mb-3">
-        <input type="text" name="searchQuery" class="form-control mr-2" placeholder="Search by name" required />
-        <button type="submit" class="btn btn-primary">Search</button>
-        <button type="button" id="resetButton" class="btn btn-secondary ml-2">Reset</button>
-    </form>
-        <!-- Tombol Kembali ke Dashboard -->
+        <!-- Form Pencarian -->
+        <form action="/mekanik/search" method="get" class="form-inline mb-3">
+            <input type="text" name="searchQuery" class="form-control mr-2" placeholder="Search by name" required /> <!-- Input pencarian -->
+            <button type="submit" class="btn btn-primary">Search</button> <!-- Tombol cari -->
+            <button type="button" id="resetButton" class="btn btn-secondary ml-2">Reset</button> <!-- Tombol reset -->
+        </form>
+        <!-- Tombol Kembali -->
         <button type="button" id="homeButton" class="btn btn-primary" onclick="window.location.href='/'">Kembali ke Dashboard</button>
     </div>
 
     <!-- Form Tambah/Edit Mekanik -->
     <h2 class="mt-4">Tambah/Edit Mekanik</h2>
     <form action="/mekanik/save" method="post" th:object="${mekanik}">
+        <!-- Input ID Mekanik (Hidden) -->
         <input type="hidden" th:field="*{id}" />
+
+        <!-- Input Nama -->
         <div class="form-group">
             <label for="nama">Nama</label>
-            <input type="text" class="form-control" id="nama" th:field="*{nama}" placeholder="Masukkan nama" required>
+            <input type="text" class="form-control" id="nama" th:field="*{nama}" placeholder="Masukkan nama" required />
         </div>
+
+        <!-- Input Keahlian -->
         <div class="form-group">
             <label for="keahlian">Keahlian</label>
-            <input type="text" class="form-control" id="keahlian" th:field="*{keahlian}" placeholder="Masukkan keahlian" required>
+            <input type="text" class="form-control" id="keahlian" th:field="*{keahlian}" placeholder="Masukkan keahlian" required />
         </div>
+
+        <!-- Input Nomor Telepon -->
         <div class="form-group">
             <label for="nomorTelepon">Nomor Telepon</label>
-            <input type="text" class="form-control" id="nomorTelepon" th:field="*{nomorTelepon}" placeholder="Masukkan nomor telepon" required>
+            <input type="text" class="form-control" id="nomorTelepon" th:field="*{nomorTelepon}" placeholder="Masukkan nomor telepon" required />
         </div>
+
+        <!-- Dropdown Status -->
         <div class="form-group">
             <label for="status">Status</label>
             <select class="form-control" id="status" th:field="*{status}" required>
@@ -45,6 +69,8 @@
                 <option value="Busy" th:selected="${mekanik.status == 'Busy'}">Busy</option>
             </select>
         </div>
+
+        <!-- Tombol Simpan -->
         <button type="submit" class="btn btn-primary">Simpan</button>
     </form>
 
@@ -53,37 +79,42 @@
     <table class="table table-striped mt-3">
         <thead>
         <tr>
-            <th>Nama</th>
-            <th>Keahlian</th>
-            <th>Nomor Telepon</th>
-            <th>Status</th>
+            <th>Nama</th> <!-- Kolom nama -->
+            <th>Keahlian</th> <!-- Kolom keahlian -->
+            <th>Nomor Telepon</th> <!-- Kolom nomor telepon -->
+            <th>Status</th> <!-- Kolom status -->
+            <th>Aksi</th> <!-- Kolom aksi -->
         </tr>
         </thead>
         <tbody>
+        <!-- Baris Mekanik -->
         <tr th:each="mekanik : ${mekaniklist}">
-            <td th:text="${mekanik.nama}"></td>
-            <td th:text="${mekanik.keahlian}"></td>
-            <td th:text="${mekanik.nomorTelepon}"></td>
-            <td th:text="${mekanik.status}"></td>
+            <td th:text="${mekanik.nama}"></td> <!-- Nama mekanik -->
+            <td th:text="${mekanik.keahlian}"></td> <!-- Keahlian mekanik -->
+            <td th:text="${mekanik.nomorTelepon}"></td> <!-- Nomor telepon mekanik -->
+            <td th:text="${mekanik.status}"></td> <!-- Status mekanik -->
             <td>
-                <!-- Tombol Edit -->
-                <a th:href="@{/mekanik/edit/{id}(id=${mekanik.id})}" class="btn btn-warning btn-sm">Edit</a>
-
-                <!-- Tombol Delete -->
+                <a th:href="@{/mekanik/edit/{id}(id=${mekanik.id})}" class="btn btn-warning btn-sm">Edit</a> <!-- Tombol edit -->
                 <a th:href="@{/mekanik/delete/{id}(id=${mekanik.id})}" class="btn btn-danger btn-sm"
-                   onclick="return confirm('Yakin ingin menghapus data ini?')">Delete</a>
+                   onclick="return confirm('Yakin ingin menghapus data ini?')">Delete</a> <!-- Tombol hapus -->
             </td>
         </tr>
         </tbody>
     </table>
 </div>
 
+<!-- Footer -->
+<div class="footer">
+    <p>&copy; 2024 Bengkel Sahabat Motor. All rights reserved.</p> <!-- Hak cipta -->
+</div>
+
+<!-- Skrip Eksternal -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+    // Fungsi Reset Button
     document.getElementById('resetButton').addEventListener('click', function () {
-        // Arahkan ke endpoint untuk memuat semua data mekanik
-        window.location.href = '/mekanik/all';
+        window.location.href = '/mekanik/all'; // Redirect ke daftar mekanik
     });
 </script>
 

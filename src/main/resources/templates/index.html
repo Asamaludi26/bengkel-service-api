@@ -1,59 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bengkel Sahabat Motor</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <!-- Metadata dasar -->
+    <meta charset="UTF-8"> <!-- Mengatur karakter encoding menjadi UTF-8 untuk mendukung berbagai karakter -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Menjadikan layout responsif di perangkat mobile -->
+    <title>Bengkel Sahabat Motor</title> <!-- Judul halaman yang tampil di tab browser -->
+
+    <!-- Menyisipkan file CSS eksternal -->
+    <link rel="stylesheet" href="/css/styles.css"> <!-- Menghubungkan ke file CSS eksternal untuk styling -->
 </head>
 <body>
 <!-- Navbar -->
 <div class="container">
     <nav class="navbar">
+        <!-- Logo -->
         <div class="logo">
-            <img src="/images/logo_bengkel4.png" alt="Logo Bengkel" />
+            <img src="/images/logo_bengkel4.png" alt="Logo Bengkel"> <!-- Gambar logo bengkel -->
         </div>
+
+        <!-- Nama bengkel -->
         <div class="navbar-text">
-            <span>Bengkel Sahabat Motor</span>
+            <span>Bengkel Sahabat Motor</span> <!-- Teks nama bengkel -->
         </div>
+
     </nav>
 
     <!-- Dashboard Container -->
     <main class="main-content">
         <div class="dashboard-container">
+            <!-- Card: Manajemen Pelanggan -->
             <div class="card">
-                <img src="/images/logo_customer.png" alt="Customer">
-                <h2>Manajemen Pelanggan</h2>
-                <p>Kelola data pelanggan dengan mudah.</p>
-                <a href="/customer/all">Lihat Detail</a>
+                <img src="/images/logo_customer.png" alt="Customer"> <!-- Ikon pelanggan -->
+                <h2>Manajemen Pelanggan</h2> <!-- Judul fitur -->
+                <p>Kelola data pelanggan dengan mudah.</p> <!-- Deskripsi fitur -->
+                <a href="/customer/all">Lihat Detail</a> <!-- Tautan ke halaman detail pelanggan -->
             </div>
+
+            <!-- Card: Mekanik -->
             <div class="card">
-                <img src="/images/logo_mekanik.png" alt="Mekanik">
-                <h2>Mekanik</h2>
-                <p>Lihat informasi lengkap tentang mekanik.</p>
-                <a href="/mekanik/all">Lihat Detail</a>
+                <img src="/images/logo_mekanik.png" alt="Mekanik"> <!-- Ikon mekanik -->
+                <h2>Manajemen Mekanik</h2> <!-- Judul fitur -->
+                <p>Lihat informasi lengkap tentang mekanik.</p> <!-- Deskripsi fitur -->
+                <a href="/mekanik/all">Lihat Detail</a> <!-- Tautan ke halaman detail mekanik -->
             </div>
+
+            <!-- Card: Penjualan Produk -->
             <div class="card">
-                <img src="/images/logo_penjualan.png" alt="Produk">
-                <h2>Penjualan Produk</h2>
-                <p>Kelola dan pantau penjualan produk.</p>
-                <a href="/penjualan/all">Lihat Detail</a>
+                <img src="/images/logo_penjualan.png" alt="Produk"> <!-- Ikon produk -->
+                <h2>Manajemen Sparepart</h2> <!-- Judul fitur -->
+                <p>Kelola dan pantau penjualan produk.</p> <!-- Deskripsi fitur -->
+                <a href="/penjualan/all">Lihat Detail</a> <!-- Tautan ke halaman detail penjualan -->
             </div>
+
+            <!-- Card: Service -->
             <div class="card">
-                <img src="/images/logo_service.png" alt="Service">
-                <h2>Service</h2>
-                <p>Cek dan kelola layanan service kendaraan.</p>
-                <a href="/service">Lihat Detail</a>
+                <img src="/images/logo_service.png" alt="Service"> <!-- Ikon service -->
+                <h2>Manajemen Layanan</h2> <!-- Judul fitur -->
+                <p>Cek dan kelola layanan service kendaraan.</p> <!-- Deskripsi fitur -->
+                <a href="/service">Lihat Detail</a> <!-- Tautan ke halaman detail service -->
             </div>
         </div>
     </main>
-
-
-    <!-- Footer -->
-    <div class="footer">
-        <p>&copy; 2024 Bengkel Sahabat Motor. All rights reserved.</p>
-    </div>
 </div>
 
+<!-- Footer -->
+<div class="footer">
+    <p>&copy; 2024 Bengkel Sahabat Motor. All rights reserved.</p> <!-- Hak cipta dan informasi footer -->
+</div>
 </body>
 </html>

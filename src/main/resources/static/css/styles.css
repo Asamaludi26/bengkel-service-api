@@ -1,186 +1,159 @@
- /*Reset styles */
+/* Reset styles */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+    margin: 0; /* Menghilangkan margin bawaan elemen */
+    padding: 0; /* Menghilangkan padding bawaan elemen */
+    box-sizing: border-box; /* Memastikan padding dan border dihitung dalam ukuran elemen */
 }
 
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f7f9fc;
-    color: #333;
-
-    display: flex;
-    flex-direction: column; /* Mengatur arah flex menjadi kolom */
-    min-height: 100vh; /* Memastikan body memenuhi tinggi viewport */
-}
-
-/* Container */
-
-.container {
-    flex: 1; /* Membuat kontainer utama mengisi ruang yang tersisa */
+    font-family: 'Arial', sans-serif; /* Font utama untuk seluruh halaman */
+    background-color: #f7f9fc; /* Warna latar belakang halaman */
+    color: #333; /* Warna teks default */
+    display: flex; /* Membuat elemen anak dalam body menjadi flex container */
+    flex-direction: column; /* Menyusun elemen secara vertikal */
+    min-height: 100vh; /* Memastikan tinggi body mencakup seluruh layar */
 }
 
 /* Navbar styles */
-
 .navbar {
-    display: flex;
-    align-items: center; /* Menyelarakan logo dan teks secara vertikal */
-    justify-content: flex-start; /* Menyusun logo dan teks dari kiri */
-    padding: 15px 20px;
-    color: #fff;
-    background-color: #007bff; /* Ganti dengan warna navbar sesuai keinginan */
+    display: flex; /* Membuat elemen anak dalam navbar menjadi flex container */
+    align-items: center; /* Menyelaraskan elemen secara vertikal di tengah */
+    justify-content: left; /* Menempatkan elemen di awal (kiri) */
+    padding: 10px 20px; /* Memberikan ruang di dalam navbar */
+    background-color: #007bff; /* Warna latar belakang navbar */
+    height: 70px; /* Tinggi navbar */
+    position: fixed; /* Navbar tetap berada di atas saat halaman digulir */
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000; /* Memastikan navbar selalu di atas elemen lainnya */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Menambahkan bayangan untuk efek visual */
 }
 
 .navbar .logo img {
-    width: 115px; /* Sesuaikan ukuran logo */
-    height: 60px; /* Sesuaikan ukuran logo */
-    margin-right: 10px; /* Memberikan jarak antara logo dan teks */
+    width: 110px; /* Ukuran lebar logo */
+    height: auto; /* Tinggi otomatis untuk menjaga rasio */
+    margin-right: 10px; /* Jarak antara logo dan teks */
 }
 
-.navbar-text span {
-    font-size: 35px; /* Ukuran teks untuk nama bengkel */
+.navbar-text {
+    font-size: 18px; /* Ukuran teks */
     color: #fff; /* Warna teks */
+    font-weight: bold; /* Membuat teks tebal */
+}
+
+/* Container utama untuk konten */
+.container {
+    flex: 1; /* Membuat kontainer mengisi ruang yang tersisa */
+    display: flex; /* Kontainer menjadi flex container */
+    justify-content: center; /* Pusatkan konten secara horizontal */
+    align-items: center; /* Pusatkan konten secara vertikal */
+    padding: 20px; /* Memberikan ruang di dalam kontainer */
+    margin-top: 70px; /* Memberikan ruang di bawah navbar */
 }
 
 /* Dashboard container styles */
-.main-content{
-    display: flex;
+.main-content {
+    display: flex; /* Membuat elemen di dalamnya menjadi flex container */
     justify-content: center; /* Pusatkan konten secara horizontal */
     align-items: center; /* Pusatkan konten secara vertikal */
 }
 
 .dashboard-container {
-
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 kolom */
-    gap: 20px; /* Jarak antar kartu */
-    max-width: 1080px; /* Lebar maksimum kontainer */
-    width: 100%; /* Lebar kontainer 100% */
-    padding: 20px; /* Padding di dalam kontainer */
-
-    /*display: flex;*/
-    /*flex-wrap: wrap;*/
-    /*justify-content: center;*/
-    /*padding: 20px;*/
-    /*gap: 20px;*/
+    display: grid; /* Menggunakan grid layout */
+    grid-template-columns: repeat(2, 1fr); /* Membuat dua kolom dengan ukuran yang sama */
+    gap: 35px; /* Jarak antara elemen dalam grid */
+    padding: 20px; /* Memberikan ruang di dalam dashboard */
 }
 
 /* Card styles */
 .card {
-    background-color: #fff;
-    align-items: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    overflow: hidden;
-    width: 300px;
-    text-align: center;
-    transition: transform 0.3s;
+    background-color: #fff; /* Warna latar belakang kartu */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Menambahkan bayangan untuk efek elevasi */
+    border-radius: 10px; /* Membuat sudut kartu melengkung */
+    overflow: hidden; /* Menyembunyikan konten yang melebihi batas kartu */
+    text-align: center; /* Teks di dalam kartu rata tengah */
+    transition: transform 0.3s; /* Animasi saat hover */
 }
 
 .card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    transform: translateY(-10px); /* Efek hover: kartu naik */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Menambah intensitas bayangan */
 }
 
 .card img {
-    width: auto;
-    height: 120px; /* sesuaikan dengan tinggi yang diinginkan */
-    max-width: 100%; /* Membatasi lebar agar tidak melewati batas container */
-    object-fit: contain; /* Untuk menjaga rasio gambar tanpa merusak bentuknya */
+    width: auto; /* Lebar otomatis */
+    height: 120px; /* Tinggi gambar */
+    max-width: 100%; /* Membatasi lebar maksimal gambar */
+    object-fit: contain; /* Mempertahankan rasio gambar */
 }
 
 .card h2 {
-    font-size: 20px;
-    margin: 15px 0;
-    color: #007bff;
+    font-size: 20px; /* Ukuran teks judul */
+    margin: 15px 0; /* Jarak atas dan bawah */
+    color: #007bff; /* Warna teks */
 }
 
 .card p {
-    font-size: 14px;
-    color: #555;
-    margin: 0 15px 15px;
+    font-size: 14px; /* Ukuran teks deskripsi */
+    color: #555; /* Warna teks deskripsi */
+    margin: 0 15px 15px; /* Jarak dalam deskripsi */
 }
 
 .card a {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: bold;
-    margin-bottom: 15px;
-    transition: background-color 0.3s;
+    display: inline-block; /* Tautan menjadi elemen blok */
+    padding: 10px 20px; /* Ruang dalam tautan */
+    background-color: #007bff; /* Warna latar belakang tautan */
+    color: #fff; /* Warna teks tautan */
+    border-radius: 5px; /* Sudut melengkung pada tombol */
+    text-decoration: none; /* Menghapus garis bawah pada tautan */
+    font-weight: bold; /* Membuat teks tebal */
+    margin-bottom: 15px; /* Jarak bawah */
+    transition: background-color 0.3s; /* Animasi saat hover */
 }
 
 .card a:hover {
-    background-color: #0056b3;
+    background-color: #0056b3; /* Warna saat hover */
 }
 
 /* Footer styles */
 .footer {
-    text-align: center;
-    padding: 15px;
-    background-color: #007bff;
-    color: #fff;
-    margin-top: 20px;
-
-}
-
-.footer p {
-    font-size: 14px;
-    margin: 0;
+    text-align: center; /* Teks rata tengah */
+    padding: 15px; /* Ruang dalam footer */
+    background-color: #007bff; /* Warna latar belakang footer */
+    color: #fff; /* Warna teks footer */
+    height: 50px; /* Tinggi footer */
 }
 
 /* Responsive styles */
+@media (max-width: 668px) {
+    .dashboard-container {
+        display: flex;
+        flex-direction: column; /* Ubah ke tata letak kolom */
+        align-items: center; /* Konten rata tengah */
+    }
+    .card {
+        width: 80%; /* Lebar kartu untuk layar kecil */
+    }
+}
 
-/*@media (max-width: 500px) {*/
-/*    .navbar{*/
-/*        padding: 5px 10px;*/
-/*    }*/
-
-/*    .navbar .logo img {*/
-/*        width: 75px; !* Sesuaikan ukuran logo *!*/
-/*        height: 40px; !* Sesuaikan ukuran logo *!*/
-/*        margin-right: 10px; !* Memberikan jarak antara logo dan teks *!*/
-/*    }*/
-
-/*    .navbar-text span {*/
-/*        font-size: 25px; !* Ukuran teks untuk nama bengkel *!*/
-/*        color: #fff; !* Warna teks *!*/
-/*    }*/
-
-/*    .dashboard-container {*/
-/*        display: grid;*/
-/*        grid-template-columns: 1fr; !* 1 kolom untuk layar kecil *!*/
-/*    }*/
-/*}*/
-
-/*@media (max-width: 600px) {*/
-/*    .card-container {*/
-/*        grid-template-columns: 1fr; !* 1 kolom untuk layar kecil *!*/
-/*    }*/
-/*}*/
-/*@media (max-width: 768px) {*/
-/*    .dashboard-container {*/
-/*        flex-direction: column;*/
-/*        align-items: center;*/
-/*    }*/
-
-/*    .card {*/
-/*        width: 90%;*/
-/*    }*/
-/*}*/
+@media (min-width: 669px) and (max-width: 1024px) {
+    .dashboard-container {
+        display: flex;
+        flex-direction: column; /* Ubah ke tata letak kolom */
+        align-items: center; /* Konten rata tengah */
+    }
+    .card {
+        width: 90%; /* Lebar kartu untuk layar sedang */
+    }
+}
 
 @media (min-width: 1025px) {
     .dashboard-container {
-        display: grid;
+        display: grid; /* Tata letak grid untuk layar besar */
         grid-template-columns: repeat(2, 1fr); /* 2 kolom */
-        /*grid-template-columns: 1fr; !* 1 kolom untuk layar kecil *!*/
     }
-
     .card {
-        width: 100%;
+        width: 100%; /* Lebar kartu penuh */
     }
 }
