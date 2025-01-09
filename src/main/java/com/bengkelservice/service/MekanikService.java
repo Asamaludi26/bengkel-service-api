@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MekanikService {
@@ -38,5 +39,19 @@ public class MekanikService {
 
     public void deleteMekanik(Long id) {
         mekanikRepository.deleteById(id);
+    }
+
+    // Method untuk update data mekanik
+    public Mekanik updateMekanik(Long id, Mekanik updatedMekanik) {
+        if (mekanikRepository.existsById(id)) {
+            updatedMekanik.setId(id); // Pastikan ID diatur untuk melakukan update
+            return mekanikRepository.save(updatedMekanik);
+        }
+        throw new IllegalArgumentException("Mekanik dengan ID " + id + " tidak ditemukan");
+    }
+
+    public Optional<Mekanik> findById(Long id) {
+
+        return mekanikRepository.findById(id);
     }
 }

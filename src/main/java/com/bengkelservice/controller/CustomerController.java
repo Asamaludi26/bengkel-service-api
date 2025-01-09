@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/customer")  // Base URL untuk View
@@ -39,13 +40,29 @@ public class CustomerController {
         return "redirect:/customer/all"; // Kembali ke halaman daftar
     }
 
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable Long id, Model model) {
+        Optional<Customer> customer = customerService.findById(id);
+        if (customer.isPresent()) {
+            model.addAttribute("customer", customer.get()); // Mengisi model dengan data customer yang akan diedit
+            return "customer"; // Mengembalikan nama template untuk form edit
+        }
+        return "redirect:/customer/all"; // Kembali ke halaman daftar jika tidak ditemukan
+    }
+
+    // Mencari customer berdasarkan nama
     @GetMapping("/search")
     public String searchCustomer(@RequestParam(value = "searchQuery", required = false) String searchQuery, Model model) {
-        List<Customer> customer = customerService.searchCustomer(searchQuery);
-        model.addAttribute("customer", customer);
+        List<Customer> customerList;
 
-        // Tambahkan objek customer kosong untuk form input
-        model.addAttribute("customer", new Customer());
+        if (searchQuery != null && !searchQuery.isEmpty()) {
+            customerList = customerService.searchCustomer(searchQuery);
+        } else {
+            customerList = customerService.getAllCustomer(); // Jika tidak ada query, tampilkan semua customer
+        }
+
+        model.addAttribute("customerList", customerList); // Daftar pelanggan
+        model.addAttribute("customer", new Customer()); // Untuk form tambah/edit
 
         return "customer"; // Nama template Thymeleaf
     }
