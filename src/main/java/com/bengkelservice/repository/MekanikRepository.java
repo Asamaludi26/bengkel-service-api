@@ -9,6 +9,5 @@ import java.util.List;
 @Repository
 public interface MekanikRepository extends JpaRepository<Mekanik, Long> {
 
-    // Custom query method: mencari mekanik berdasarkan nama
     List<Mekanik> findByNamaContainingIgnoreCase(String nama);
 }

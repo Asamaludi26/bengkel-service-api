@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/mekanik") // Base URL untuk Mekanik
@@ -32,16 +33,6 @@ public class MekanikController {
         return "redirect:/mekanik/all"; // Kembali ke halaman daftar
     }
 
-    // Menampilkan form edit dengan data mekanik terpilih
-    @GetMapping("/edit/{id}")
-    public String editMekanik(@PathVariable Long id, Model model) {
-        Mekanik mekaniklist = mekanikService.getMekanikById(id);
-        model.addAttribute("mekaniklist", mekaniklist); // Data yang di-edit
-        List<Mekanik> mekanik = mekanikService.getAllMekanik();
-        model.addAttribute("mekanik", mekanik); // Tetap tampilkan daftar
-        return "mekanik";
-    }
-
     // Menghapus mekanik berdasarkan ID
     @GetMapping("/delete/{id}")
     public String deleteMekanik(@PathVariable Long id) {
@@ -52,11 +43,22 @@ public class MekanikController {
     @GetMapping("/search")
     public String searchMekanik(@RequestParam(value = "searchQuery", required = false) String searchQuery, Model model) {
         List<Mekanik> mekanik = mekanikService.searchMekanik(searchQuery);
-        model.addAttribute("mekanik", mekanik);
+        model.addAttribute("mekaniklist", mekanik);
 
         // Tambahkan objek mekanik kosong untuk form input
         model.addAttribute("mekanik", new Mekanik());
 
         return "mekanik"; // Nama template Thymeleaf
+    }
+
+
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable Long id, Model model) {
+        Optional<Mekanik> mekanik = mekanikService.findById(id);
+        if (mekanik.isPresent()) {
+            model.addAttribute("mekanik", mekanik.get()); // Mengisi model dengan data mekanik yang akan diedit
+            return "mekanik"; // Mengembalikan nama template untuk form edit
+        }
+        return "redirect:/mekanik/all"; // Kembali ke halaman daftar jika tidak ditemukan
     }
 }
