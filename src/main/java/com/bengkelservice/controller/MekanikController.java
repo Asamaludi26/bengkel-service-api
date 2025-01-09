@@ -52,7 +52,7 @@ public class MekanikController {
     @GetMapping("/search")
     public String searchMekanik(@RequestParam(value = "searchQuery", required = false) String searchQuery, Model model) {
         List<Mekanik> mekanik = mekanikService.searchMekanik(searchQuery);
-        model.addAttribute("mekanik", mekanik);
+        model.addAttribute("mekaniklist", mekanik);
 
         // Tambahkan objek mekanik kosong untuk form input
         model.addAttribute("mekanik", new Mekanik());

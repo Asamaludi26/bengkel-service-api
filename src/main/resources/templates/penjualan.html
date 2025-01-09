@@ -1,34 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manajemen Sparepart</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Metadata dasar -->
+    <meta charset="UTF-8"> <!-- Encoding karakter halaman -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Menjadikan halaman responsif -->
+    <title>Manajemen Sparepart</title> <!-- Judul halaman -->
+
+    <!-- Menghubungkan file CSS -->
+    <link rel="stylesheet" href="/css/styles2.css"> <!-- File CSS khusus -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> <!-- Bootstrap CSS -->
 </head>
 <body>
 
+<!-- Navigasi -->
+<nav class="navbar">
+    <div class="logo">
+        <img src="/images/logo_bengkel4.png" alt="Logo Bengkel" /> <!-- Logo bengkel -->
+        <div class="navbar-text">Bengkel Sahabat Motor</div> <!-- Nama bengkel -->
+    </div>
+</nav>
+
+<!-- Kontainer Utama -->
 <div class="container">
+    <!-- Judul Halaman -->
     <h1 class="mt-5">Manajemen Sparepart</h1>
 
     <!-- Form Tambah/Edit Produk -->
     <form action="/penjualan/save" method="post" enctype="multipart/form-data">
+        <!-- Input Nama Produk -->
         <div class="form-group">
             <label for="namaProduk">Nama Produk</label>
             <input type="text" class="form-control" id="namaProduk" name="namaProduk" placeholder="Masukkan nama produk" required>
         </div>
+
+        <!-- Input Foto Produk -->
         <div class="form-group">
             <label for="fotoProduk">Foto Produk</label>
             <input type="file" class="form-control-file" id="fotoProduk" name="fotoProduk" accept="image/*" required>
         </div>
+
+        <!-- Input Harga -->
         <div class="form-group">
             <label for="harga">Harga</label>
             <input type="number" class="form-control" id="harga" name="harga" placeholder="Masukkan harga produk" required>
         </div>
+
+        <!-- Input Stok -->
         <div class="form-group">
             <label for="stok">Stok</label>
             <input type="number" class="form-control" id="stok" name="stok" placeholder="Masukkan stok produk" required>
         </div>
+
+        <!-- Tombol Simpan -->
         <button type="submit" class="btn btn-primary">Simpan</button>
     </form>
 
@@ -37,23 +60,27 @@
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>Nama</th>
-            <th>Foto</th>
-            <th>Harga</th>
-            <th>Stok</th>
-            <th>Aksi</th>
+            <th>Nama</th> <!-- Kolom nama produk -->
+            <th>Foto</th> <!-- Kolom foto produk -->
+            <th>Harga</th> <!-- Kolom harga produk -->
+            <th>Stok</th> <!-- Kolom stok produk -->
+            <th>Aksi</th> <!-- Kolom untuk tombol aksi -->
         </tr>
         </thead>
         <tbody>
+        <!-- Perulangan Data Produk -->
         <tr th:each="produk : ${produkList}">
-            <td th:text="${produk.namaProduk}"></td>
+            <td th:text="${produk.namaProduk}"></td> <!-- Nama produk -->
             <td>
-                <img th:src="@{'/images/uploads/' + ${produk.fotoProduk}}" alt="Foto Produk" class="img-thumbnail" style="width: 100px; height: auto;">
+                <img th:src="@{'/images/uploads/' + ${produk.fotoProduk}}" alt="Foto Produk" class="img-thumbnail" style="width: 100px; height: auto;"> <!-- Foto produk -->
             </td>
-            <td th:text="${produk.harga}"></td>
-            <td th:text="${produk.stok}"></td>
+            <td th:text="${produk.harga}"></td> <!-- Harga produk -->
+            <td th:text="${produk.stok}"></td> <!-- Stok produk -->
             <td>
+                <!-- Tombol Edit -->
                 <a th:href="@{/penjualan/edit/{id}(id=${produk.id})}" class="btn btn-warning btn-sm">Edit</a>
+
+                <!-- Tombol Hapus -->
                 <a th:href="@{/penjualan/delete/{id}(id=${produk.id})}" class="btn btn-danger btn-sm"
                    onclick="return confirm('Yakin ingin menghapus data ini?')">Delete</a>
             </td>
@@ -62,6 +89,12 @@
     </table>
 </div>
 
+<!-- Footer -->
+<div class="footer">
+    <p>&copy; 2024 Bengkel Sahabat Motor. All rights reserved.</p> <!-- Hak cipta -->
+</div>
+
+<!-- Skrip JavaScript -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 

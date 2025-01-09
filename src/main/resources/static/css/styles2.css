@@ -1,0 +1,129 @@
+/* Reset styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa; /* Warna latar belakang lembut */
+    color: #333; /* Warna teks utama */
+    display: flex;
+    flex-direction: column; /* Kolom fleksibel untuk tata letak */
+    min-height: 100vh; /* Memastikan body memenuhi tinggi layar */
+}
+
+/* Navbar styles */
+.navbar {
+    display: flex;
+    align-items: center; /* Menyelaraskan elemen secara vertikal */
+    background-color: #007bff; /* Warna biru untuk navbar */
+    color: #fff; /* Teks warna putih */
+    padding: 10px 20px; /* Ruang di dalam navbar */
+    position: fixed; /* Tetap di bagian atas */
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000; /* Prioritas di atas elemen lain */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Bayangan lembut */
+}
+
+.navbar .logo {
+    display: flex;
+    align-items: center; /* Menyelaraskan logo dan teks secara vertikal */
+}
+
+.navbar .logo img {
+    height: 50px; /* Tinggi logo */
+    object-fit: contain; /* Menyesuaikan gambar */
+    margin-right: 10px; /* Jarak antara logo dan teks */
+}
+
+.navbar-text {
+    font-size: 23px;
+    font-weight: bold;
+    margin-left: 0; /* Pastikan teks berada langsung di sebelah logo */
+}
+
+/* Container adjustments */
+.container {
+    margin-top: 80px; /* Memberikan ruang untuk navbar tetap */
+    padding: 20px;
+}
+
+/* Dashboard styles */
+.dashboard-container {
+    max-width: 1200px; /* Lebar maksimum untuk tata letak */
+    margin: 0 auto; /* Pusatkan kontainer */
+}
+
+h1, h2 {
+    color: #007bff; /* Warna biru untuk heading */
+    margin-bottom: 15px;
+}
+
+.form-inline .form-control {
+    width: auto; /* Input inline */
+    flex-grow: 1; /* Sesuaikan ukuran input */
+}
+
+/* Table styles */
+.table {
+    margin-top: 20px;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f9f9f9; /* Warna berbeda untuk baris ganjil */
+}
+
+.table-striped tbody tr:hover {
+    background-color: #eef5fc; /* Warna pada hover */
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.btn-warning {
+    color: #fff;
+    background-color: #ffc107;
+}
+
+.btn-danger {
+    color: #fff;
+    background-color: #dc3545;
+}
+
+/* Footer styles */
+.footer {
+    text-align: center;
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    .form-inline {
+        flex-direction: column; /* Form berubah menjadi kolom */
+        align-items: stretch; /* Input memenuhi lebar */
+    }
+
+    .dashboard-container {
+        padding: 10px; /* Kurangi padding pada layar kecil */
+    }
+
+    .navbar .logo img {
+        height: 40px; /* Perkecil logo */
+    }
+}

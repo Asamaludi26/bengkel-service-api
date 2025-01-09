@@ -10,5 +10,5 @@ import java.util.List;
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     // Custom query method: mencari customer berdasarkan nama
-    List<Customer> findByNamaContainingIgnoreCase(String nama);
+    List<Customer> findBynamaContainingIgnoreCase(String nama);
 }

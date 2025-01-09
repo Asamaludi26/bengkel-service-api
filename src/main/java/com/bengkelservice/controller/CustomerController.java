@@ -42,7 +42,7 @@ public class CustomerController {
     @GetMapping("/search")
     public String searchCustomer(@RequestParam(value = "searchQuery", required = false) String searchQuery, Model model) {
         List<Customer> customer = customerService.searchCustomer(searchQuery);
-        model.addAttribute("customer", customer);
+        model.addAttribute("customerList", customer);
 
         // Tambahkan objek customer kosong untuk form input
         model.addAttribute("customer", new Customer());

@@ -1,19 +1,10 @@
-package com.bengkelservice.controllers;
+package com.bengkelservice.controller;
 
-import com.bengkelservice.model.Customer;
-import com.bengkelservice.service.CustomerService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import java.util.List;
 
 @Controller
 public class ViewController {
-
-    @Autowired
-    private CustomerService customerService;
 
     // Menampilkan Dashboard Utama
     @GetMapping("/")
