@@ -25,7 +25,7 @@ public class MekanikService {
 
     // Method untuk mencari mekanik berdasarkan nama
     public List<Mekanik> searchMekanik(String searchQuery) {
-        return mekanikRepository.findBynamaContainingIgnoreCase(searchQuery);
+        return mekanikRepository.findByNamaContainingIgnoreCase(searchQuery);
     }
 
     public Mekanik saveMekanik(Mekanik mekanik) {
