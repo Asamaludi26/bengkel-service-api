@@ -1,4 +1,4 @@
-package com.bengkelservice.controller;
+package com.bengkelservice.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomerService {
@@ -38,7 +39,7 @@ public class CustomerService {
         return customerRepository.findBynamaContainingIgnoreCase(searchQuery);
     }
 
-    // Method untuk update data customer
+    // Method untuk update data mekanik
     public Customer updateCustomer(Long id, Customer updatedCustomer) {
         if (customerRepository.existsById(id)) {
             updatedCustomer.setId(id); // Pastikan ID diatur untuk melakukan update
@@ -47,4 +48,7 @@ public class CustomerService {
         throw new IllegalArgumentException("Customer dengan ID " + id + " tidak ditemukan");
     }
 
+    public Optional<Customer> findById(Long id) {
+        return customerRepository.findById(id);
+    }
 }
