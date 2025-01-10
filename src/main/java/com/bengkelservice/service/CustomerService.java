@@ -36,7 +36,7 @@ public class CustomerService {
 
     // Method untuk mencari customer berdasarkan nama
     public List<Customer> searchCustomer(String searchQuery) {
-        return customerRepository.findByNamaContainingIgnoreCase(searchQuery);
+        return customerRepository.findBynamaContainingIgnoreCase(searchQuery);
     }
 
     // Method untuk update data mekanik
