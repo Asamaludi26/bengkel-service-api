@@ -1,12 +1,15 @@
 package com.bengkelservice.model;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import org.springframework.web.multipart.MultipartFile;
+
 import jakarta.persistence.Transient;
 
 @Entity
@@ -17,16 +20,20 @@ public class PenjualanProduk {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Nama produk tidak boleh kosong")
+    @Size(min = 1, max = 100, message = "Nama produk harus antara 1 dan 100 karakter")
     private String namaProduk;
 
     private String fotoProduk; // Nama atau path file gambar
 
+    @NotNull(message = "Harga tidak boleh kosong")
     private Double harga;
 
+    @NotNull(message = "Stok tidak boleh kosong")
     private Integer stok;
 
     @Transient
-    private MultipartFile file; // Properti untuk menangkap file upload
+    private MultipartFile foto; // Properti untuk menangkap file upload
 
     // Getter dan Setter
     public Long getId() {
@@ -69,11 +76,11 @@ public class PenjualanProduk {
         this.stok = stok;
     }
 
-    public MultipartFile getFile() {
-        return file;
+    public MultipartFile getFoto() {
+        return foto;
     }
 
-    public void setFile(MultipartFile file) {
-        this.file = file;
+    public void setFoto(MultipartFile foto) {
+        this.foto = foto;
     }
 }

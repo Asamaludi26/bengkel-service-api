@@ -17,20 +17,7 @@ public class PenjualanProdukService {
         return penjualanProdukRepository.findAll();
     }
 
-    public void saveProduk(PenjualanProduk produk) {
-        penjualanProdukRepository.save(produk);
-    }
-
-    public PenjualanProduk getProdukById(Long id) {
-        return penjualanProdukRepository.findById(id).orElse(null);
-    }
-
-    // Method untuk mencari mekanik berdasarkan nama
-    public List<PenjualanProduk> searchProduk(String searchQuery) {
-        return penjualanProdukRepository.findBynamaProdukContainingIgnoreCase(searchQuery);
-    }
-
-    public void deleteProduk(Long id) {
-        penjualanProdukRepository.deleteById(id);
+    public void saveProduk(PenjualanProduk penjualanProduk) {
+        penjualanProdukRepository.save(penjualanProduk);
     }
 }

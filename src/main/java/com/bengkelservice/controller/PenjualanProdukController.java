@@ -5,10 +5,12 @@ import com.bengkelservice.service.PenjualanProdukService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import jakarta.validation.Valid;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -28,17 +30,22 @@ public class PenjualanProdukController {
     public String getAllProduk(Model model) {
         List<PenjualanProduk> produkList = penjualanProdukService.getAllProduk();
         model.addAttribute("produkList", produkList);
-        model.addAttribute("produk", new PenjualanProduk());
+//        model.addAttribute("produk", new PenjualanProduk());
         return "penjualan";
     }
 
     @PostMapping("/save")
     public String saveProduk(
-            @ModelAttribute PenjualanProduk penjualanProduk,
-            @RequestParam("fotoProduk") MultipartFile fotoProduk,
+            @Valid @ModelAttribute PenjualanProduk penjualanProduk,
+            BindingResult bindingResult,
             RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            return "redirect:/penjualan/all"; // Kembali ke halaman jika ada error
+        }
+
         try {
-            if (!fotoProduk.isEmpty()) {
+            MultipartFile fotoProduk = penjualanProduk.getFoto();
+            if (fotoProduk != null && !fotoProduk.isEmpty()) {
                 // Tentukan folder penyimpanan
                 Path folderPath = Paths.get(UPLOAD_DIR);
                 Files.createDirectories(folderPath);
@@ -59,31 +66,9 @@ public class PenjualanProdukController {
             redirectAttributes.addFlashAttribute("success", "Produk berhasil disimpan!");
         } catch (IOException e) {
             e.printStackTrace();
-            redirectAttributes.addFlashAttribute("error", "Gagal menyimpan file!");
+            redirectAttributes .addFlashAttribute("error", "Gagal menyimpan foto produk!");
         }
-        return "redirect:/penjualan";
-    }
 
-    @GetMapping("/edit/{id}")
-    public String editProduk(@PathVariable Long id, Model model) {
-        PenjualanProduk produk = penjualanProdukService.getProdukById(id);
-        model.addAttribute("produk", produk);
-        List<PenjualanProduk> produkList = penjualanProdukService.getAllProduk();
-        model.addAttribute("produkList", produkList);
-        return "penjualan";
-    }
-
-    @GetMapping("/delete/{id}")
-    public String deleteProduk(@PathVariable Long id) {
-        penjualanProdukService.deleteProduk(id);
         return "redirect:/penjualan/all";
-    }
-
-    @GetMapping("/search")
-    public String searchProduk(@RequestParam(value = "searchQuery", required = false) String searchQuery, Model model) {
-        List<PenjualanProduk> produkList = penjualanProdukService.searchProduk(searchQuery);
-        model.addAttribute("produkList", produkList);
-        model.addAttribute("produk", new PenjualanProduk());
-        return "penjualan";
     }
 }
