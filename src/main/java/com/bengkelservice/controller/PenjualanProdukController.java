@@ -3,6 +3,7 @@ package com.bengkelservice.controller;
 import com.bengkelservice.model.PenjualanProduk;
 import com.bengkelservice.service.PenjualanProdukService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.validation.Valid;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,7 +23,9 @@ import java.util.List;
 @RequestMapping("/penjualan")
 public class PenjualanProdukController {
 
-    private static final String UPLOAD_DIR = "src/main/resources/static/images/uploads"; // Folder for storing images
+    // Define the folder where images will be uploaded (inside static folder)
+    @Value("${upload.dir}") // Use a property from application.properties
+    private String uploadDir;
 
     @Autowired
     private PenjualanProdukService penjualanProdukService;
@@ -44,7 +48,7 @@ public class PenjualanProdukController {
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("error", "Please check your input.");
-            return "redirect:/penjualan/all";
+            return "penjualan"; // Return to the same page to show errors
         }
 
         try {
@@ -53,7 +57,7 @@ public class PenjualanProdukController {
 
             if (fotoFile != null && !fotoFile.isEmpty()) {
                 // Create folder if it doesn't exist
-                Path folderPath = Paths.get(UPLOAD_DIR);
+                Path folderPath = Paths.get(uploadDir);
                 Files.createDirectories(folderPath);
 
                 // Generate a unique filename for the uploaded image
@@ -63,7 +67,7 @@ public class PenjualanProdukController {
                 // Save the file
                 fotoFile.transferTo(filePath);
 
-                // Save the file name in the database
+                // Save the file name (only the file name, not the full path) in the database
                 penjualanProduk.setFoto(fileName);
             }
 
@@ -93,13 +97,40 @@ public class PenjualanProdukController {
 
     // Delete product by ID
     @GetMapping("/delete/{id}")
-    public String deleteProduk(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+    public String deleteProduk(@ PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         try {
+            // Call the service method to delete the product and associated image
+            PenjualanProduk penjualanProduk = penjualanProdukService.getProdukById(id);
+            if (penjualanProduk != null && penjualanProduk.getFoto() != null) {
+                // Delete the associated image file
+                File file = new File(uploadDir, penjualanProduk.getFoto());
+                if (file.exists()) {
+                    file.delete();
+                }
+            }
             penjualanProdukService.deleteProduk(id);
             redirectAttributes.addFlashAttribute("success", "Product deleted successfully!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Failed to delete the product.");
         }
         return "redirect:/penjualan/all"; // Redirect to product list after deletion
+    }
+
+    @GetMapping("/search")
+    public String searchProduk(@RequestParam(value = "searchQuery", required = false) String searchQuery, Model model) {
+        List<PenjualanProduk> produkList;
+
+        // If searchQuery is not null or empty, perform the search
+        if (searchQuery != null && !searchQuery.trim().isEmpty()) {
+            produkList = penjualanProdukService.searchProduk(searchQuery); // Perform search
+        } else {
+            produkList = penjualanProdukService.getAllProduk(); // Fetch all products if no search term
+        }
+
+        // Add the search results to the model
+        model.addAttribute("produkList", produkList);  // Corrected model attribute name
+        model.addAttribute("penjualanProduk", new PenjualanProduk()); // Empty form for creating new products
+
+        return "penjualan"; // Thymeleaf template name
     }
 }
