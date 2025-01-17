@@ -2,9 +2,14 @@ package com.bengkelservice.service;
 
 import com.bengkelservice.model.PenjualanProduk;
 import com.bengkelservice.repository.PenjualanProdukRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,11 +19,30 @@ import java.util.List;
 @Service
 public class PenjualanProdukService {
 
+    private static final Logger logger = LoggerFactory.getLogger(PenjualanProdukService.class);
+
     @Autowired
     private PenjualanProdukRepository penjualanProdukRepository;
 
-    // Define the folder where images are stored
-    private static final String UPLOAD_DIR = "src/main/resources/static/images/uploads"; // Folder for storing images
+    @Value("${upload.dir}")
+    private String uploadDir;
+
+    public void uploadFile(MultipartFile file) {
+        try {
+            // Ensure the upload directory exists
+            File directory = new File(uploadDir);
+            if (!directory.exists()) {
+                directory.mkdirs(); // Create the directory if it doesn't exist
+            }
+
+            // Create the destination file
+            File destinationFile = new File(uploadDir, file.getOriginalFilename());
+            file.transferTo(destinationFile);
+        } catch (IOException e) {
+            logger.error("Failed to upload file: {}", e.getMessage());
+            // Handle the exception appropriately
+        }
+    }
 
     // Get all products
     public List<PenjualanProduk> getAllProduk() {
@@ -51,13 +75,13 @@ public class PenjualanProdukService {
     // Method to delete the file from the uploads folder
     private void deleteFile(String fileName) {
         // Define the path to the uploads folder
-        Path filePath = Paths.get(UPLOAD_DIR + "/" + fileName);
+        Path filePath = Paths.get(uploadDir, fileName);
 
         try {
             // Delete the file if it exists
             Files.deleteIfExists(filePath);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Failed to delete file: {}", e.getMessage());
             // You may want to log the error here
         }
     }

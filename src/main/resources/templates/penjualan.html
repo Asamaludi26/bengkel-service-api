@@ -57,7 +57,7 @@
             <label for="foto">Foto Produk</label>
             <input type="file" class="form-control-file" id="foto" name="fotoFile" accept="image/*" onchange="previewImage(event)">
             <div th:if="${penjualanProduk.foto}">
-                <img th:src="@{'/images/uploads/' + ${penjualanProduk.foto}}" id="imagePreview" alt="Foto Produk" class="img-thumbnail mt-2" style="width: 100px;">
+                <img th:src="@{'/images/uploads/' + ${penjualanProduk.foto}}" id="imagePreview" alt="Foto Produk" class="img-thumbnail mt-2" style="width: 100px;" onerror="this.onerror=null; this.src='/images/default.png';">
             </div>
             <!-- Image preview when file is selected -->
             <div id="imagePreviewContainer" style="display:none;">
@@ -94,7 +94,7 @@
             <td th:text="${produk.nama}"></td>
             <td>
                 <!-- Display the product image if available -->
-                <img th:src="@{'/images/uploads/' + ${produk.foto}}" alt="Foto Produk" class="img-thumbnail" style="width: 100px;">
+                <img th:src="@{'/images/uploads/' + ${produk.foto}}" alt="Foto Produk" class="img-thumbnail" style="width: 100px;" onerror="this.onerror=null; this.src='/images/default.png';">
             </td>
             <td th:text="${produk.harga}"></td>
             <td th:text="${produk.stok}"></td>
@@ -103,7 +103,6 @@
                 <a th:href="@{/penjualan/delete/{id}(id=${produk.id})}"
                    class="btn btn-danger btn-sm"
                    onclick="return confirm('Yakin ingin menghapus data ini?')">Delete</a>
-
             </td>
         </tr>
         </tbody>

@@ -18,6 +18,7 @@ public class PenjualanProduk {
     @Size(min = 1, max = 100, message = "Nama produk harus antara 1 dan 100 karakter")
     private String nama;
 
+    @Column(name = "foto", length = 255) // Adjust length as needed
     private String foto; // File name or path of the image
 
     @NotNull(message = "Harga tidak boleh kosong")
