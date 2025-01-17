@@ -21,6 +21,7 @@ import java.util.List;
 @RequestMapping("/penjualan")
 public class PenjualanProdukController {
 
+    // Define the folder where images will be uploaded (inside static folder)
     private static final String UPLOAD_DIR = "src/main/resources/static/images/uploads"; // Folder for storing images
 
     @Autowired
@@ -63,7 +64,7 @@ public class PenjualanProdukController {
                 // Save the file
                 fotoFile.transferTo(filePath);
 
-                // Save the file name in the database
+                // Save the file name (only the file name, not the full path) in the database
                 penjualanProduk.setFoto(fileName);
             }
 
@@ -95,6 +96,7 @@ public class PenjualanProdukController {
     @GetMapping("/delete/{id}")
     public String deleteProduk(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         try {
+            // Call the service method to delete the product and associated image
             penjualanProdukService.deleteProduk(id);
             redirectAttributes.addFlashAttribute("success", "Product deleted successfully!");
         } catch (Exception e) {
@@ -103,4 +105,21 @@ public class PenjualanProdukController {
         return "redirect:/penjualan/all"; // Redirect to product list after deletion
     }
 
+    @GetMapping("/search")
+    public String searchProduk(@RequestParam(value = "searchQuery", required = false) String searchQuery, Model model) {
+        List<PenjualanProduk> produkList;
+
+        // If searchQuery is not null or empty, perform the search
+        if (searchQuery != null && !searchQuery.trim().isEmpty()) {
+            produkList = penjualanProdukService.searchProduk(searchQuery); // Perform search
+        } else {
+            produkList = penjualanProdukService.getAllProduk(); // Fetch all products if no search term
+        }
+
+        // Add the search results to the model
+        model.addAttribute("produkList", produkList);  // Corrected model attribute name
+        model.addAttribute("penjualanProduk", new PenjualanProduk()); // Empty form for creating new products
+
+        return "penjualan"; // Thymeleaf template name
+    }
 }

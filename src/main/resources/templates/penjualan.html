@@ -27,8 +27,8 @@
     <!-- Form Pencarian dan Tombol Kembali -->
     <div class="d-flex justify-content-between mb-3">
         <!-- Form Pencarian -->
-        <form action="/penjualan/search" method="get" class="form-inline mb-3">
-            <input type="text" name="searchQuery" class="form-control mr-2" placeholder="Search by name" required /> <!-- Input pencarian -->
+        <form action="/penjualan/search" method="get" class="form-inline mb-3" id="searchForm">
+            <input type="text" name="searchQuery" class="form-control mr-2" placeholder="Search by name" /> <!-- Input pencarian -->
             <button type="submit" class="btn btn-primary">Search</button> <!-- Tombol cari -->
             <button type="button" id="resetButton" class="btn btn-secondary ml-2">Reset</button> <!-- Tombol reset -->
         </form>
@@ -100,7 +100,10 @@
             <td th:text="${produk.stok}"></td>
             <td>
                 <a th:href="@{/penjualan/edit/{id}(id=${produk.id})}" class="btn btn-warning btn-sm">Edit</a>
-                <a th:href="@{/penjualan/delete/{id}(id=${produk.id})}" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus data ini?')">Delete</a>
+                <a th:href="@{/penjualan/delete/{id}(id=${produk.id})}"
+                   class="btn btn-danger btn-sm"
+                   onclick="return confirm('Yakin ingin menghapus data ini?')">Delete</a>
+
             </td>
         </tr>
         </tbody>
@@ -135,6 +138,14 @@
             imagePreviewContainer.style.display = 'none';
         }
     }
+
+    // Reset Button for Search
+    document.getElementById("resetButton").addEventListener("click", function() {
+        // Clear the search input
+        document.querySelector('input[name="searchQuery"]').value = '';
+        // Reload the page to show all products
+        window.location.href = '/penjualan/all'; // Redirect to all products page
+    });
 </script>
 
 </body>
