@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PenjualanProdukService {
@@ -17,17 +18,13 @@ public class PenjualanProdukService {
         return penjualanProdukRepository.findAll();
     }
 
-    public void saveProduk(PenjualanProduk produk) {
-        penjualanProdukRepository.save(produk);
-    }
-
     public PenjualanProduk getProdukById(Long id) {
-        return penjualanProdukRepository.findById(id).orElse(null);
+        Optional<PenjualanProduk> optionalProduk = penjualanProdukRepository.findById(id);
+        return optionalProduk.orElse(null);
     }
 
-    // Method untuk mencari mekanik berdasarkan nama
-    public List<PenjualanProduk> searchProduk(String searchQuery) {
-        return penjualanProdukRepository.findBynamaProdukContainingIgnoreCase(searchQuery);
+    public void saveProduk(PenjualanProduk penjualanProduk) {
+        penjualanProdukRepository.save(penjualanProduk);
     }
 
     public void deleteProduk(Long id) {

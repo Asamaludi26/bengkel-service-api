@@ -1,13 +1,10 @@
 package com.bengkelservice.model;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.springframework.web.multipart.MultipartFile;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "penjualan_produk")
@@ -17,18 +14,23 @@ public class PenjualanProduk {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String namaProduk;
+    @NotBlank(message = "Nama produk tidak boleh kosong")
+    @Size(min = 1, max = 100, message = "Nama produk harus antara 1 dan 100 karakter")
+    private String nama;
 
-    private String fotoProduk; // Nama atau path file gambar
+    private String foto; // File name or path of the image
 
+    @NotNull(message = "Harga tidak boleh kosong")
     private Double harga;
 
+    @NotNull(message = "Stok tidak boleh kosong")
     private Integer stok;
 
     @Transient
-    private MultipartFile file; // Properti untuk menangkap file upload
+    private MultipartFile fotoFile; // For capturing file during form submission
 
-    // Getter dan Setter
+    // Getters and Setters
+
     public Long getId() {
         return id;
     }
@@ -37,20 +39,20 @@ public class PenjualanProduk {
         this.id = id;
     }
 
-    public String getNamaProduk() {
-        return namaProduk;
+    public String getNama() {
+        return nama;
     }
 
-    public void setNamaProduk(String namaProduk) {
-        this.namaProduk = namaProduk;
+    public void setNama(String nama) {
+        this.nama = nama;
     }
 
-    public String getFotoProduk() {
-        return fotoProduk;
+    public String getFoto() {
+        return foto;
     }
 
-    public void setFotoProduk(String fotoProduk) {
-        this.fotoProduk = fotoProduk;
+    public void setFoto(String foto) {
+        this.foto = foto;
     }
 
     public Double getHarga() {
@@ -69,11 +71,11 @@ public class PenjualanProduk {
         this.stok = stok;
     }
 
-    public MultipartFile getFile() {
-        return file;
+    public MultipartFile getFotoFile() {
+        return fotoFile;
     }
 
-    public void setFile(MultipartFile file) {
-        this.file = file;
+    public void setFotoFile(MultipartFile fotoFile) {
+        this.fotoFile = fotoFile;
     }
 }
