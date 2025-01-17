@@ -37,9 +37,13 @@
 
         <div class="form-group">
             <label for="foto">Foto Produk</label>
-            <input type="file" class="form-control-file" id="foto" name="fotoFile" accept="image/*">
+            <input type="file" class="form-control-file" id="foto" name="fotoFile" accept="image/*" onchange="previewImage(event)">
             <div th:if="${penjualanProduk.foto}">
-                <img th:src="@{'/images/uploads/' + ${penjualanProduk.foto}}" alt="Foto Produk" class="img-thumbnail mt-2" style="width: 100px;">
+                <img th:src="@{'/images/uploads/' + ${penjualanProduk.foto}}" id="imagePreview" alt="Foto Produk" class="img-thumbnail mt-2" style="width: 100px;">
+            </div>
+            <!-- Image preview when file is selected -->
+            <div id="imagePreviewContainer" style="display:none;">
+                <img id="imagePreview" class="img-thumbnail mt-2" style="width: 100px;">
             </div>
         </div>
 
@@ -71,6 +75,7 @@
         <tr th:each="produk : ${produkList}">
             <td th:text="${produk.nama}"></td>
             <td>
+                <!-- Display the product image if available -->
                 <img th:src="@{'/images/uploads/' + ${produk.foto}}" alt="Foto Produk" class="img-thumbnail" style="width: 100px;">
             </td>
             <td th:text="${produk.harga}"></td>
@@ -86,6 +91,30 @@
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Script to Preview the Image when file is selected -->
+<script>
+    function previewImage(event) {
+        const imagePreview = document.getElementById('imagePreview');
+        const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+
+        const file = event.target.files[0];
+        if (file) {
+            // Create an object URL for the image file
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Set the source of the image preview
+                imagePreview.src = e.target.result;
+                // Show the preview container
+                imagePreviewContainer.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            // Hide the preview container if no file is selected
+            imagePreviewContainer.style.display = 'none';
+        }
+    }
+</script>
 
 </body>
 </html>
