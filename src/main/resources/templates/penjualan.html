@@ -1,22 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manajemen Sparepart</title>
-    <link rel="stylesheet" href="/css/styles2.css">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Metadata dasar -->
+    <meta charset="UTF-8"> <!-- Menentukan encoding karakter halaman -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Membuat tampilan responsif -->
+    <title>Data Penjualan</title> <!-- Judul halaman -->
+
+    <!-- Menghubungkan file CSS -->
+    <link rel="stylesheet" href="/css/styles2.css"> <!-- File CSS khusus -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> <!-- Bootstrap CSS -->
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container">
-        <a class="navbar-brand" href="#">Bengkel Sahabat Motor</a>
+<!-- Navigasi -->
+<nav class="navbar">
+    <div class="logo">
+        <img src="/images/logo_bengkel4.png" alt="Logo Bengkel" /> <!-- Logo bengkel -->
+        <div class="navbar-text">Bengkel Sahabat Motor</div> <!-- Nama bengkel -->
     </div>
 </nav>
 
-<div class="container mt-5">
-    <h1>Manajemen Sparepart</h1>
+<div class="container">
+    <!-- Judul Halaman -->
+    <h1 class="mt-5">Data Penjualan</h1>
+
+    <!-- Form Pencarian dan Tombol Kembali -->
+    <div class="d-flex justify-content-between mb-3">
+        <!-- Form Pencarian -->
+        <form action="/penjualan/search" method="get" class="form-inline mb-3">
+            <input type="text" name="searchQuery" class="form-control mr-2" placeholder="Search by name" required /> <!-- Input pencarian -->
+            <button type="submit" class="btn btn-primary">Search</button> <!-- Tombol cari -->
+            <button type="button" id="resetButton" class="btn btn-secondary ml-2">Reset</button> <!-- Tombol reset -->
+        </form>
+        <!-- Tombol Kembali -->
+        <button type="button" id="homeButton" class="btn btn-primary" onclick="window.location.href='/'">Kembali ke Dashboard</button>
+    </div>
 
     <!-- Display Success or Error Messages -->
     <div th:if="${success}" class="alert alert-success">
@@ -87,6 +105,9 @@
         </tr>
         </tbody>
     </table>
+</div>
+<div class="footer">
+    <p>&copy; 2024 Bengkel Sahabat Motor. All rights reserved.</p> <!-- Hak cipta -->
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

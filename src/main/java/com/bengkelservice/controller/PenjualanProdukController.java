@@ -102,4 +102,5 @@ public class PenjualanProdukController {
         }
         return "redirect:/penjualan/all"; // Redirect to product list after deletion
     }
+
 }
