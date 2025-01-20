@@ -86,6 +86,20 @@ public class PenjualanProdukService {
         }
     }
 
+    public double getHargaProduk(String namaProduk) {
+        List<PenjualanProduk> produkList = penjualanProdukRepository.findAll();
+        for (PenjualanProduk produk : produkList) {
+            if (produk.getNama().equalsIgnoreCase(namaProduk)) {
+                return produk.getHarga(); // Mengembalikan harga produk jika nama cocok
+            }
+        }
+        throw new IllegalArgumentException("Produk dengan nama " + namaProduk + " tidak ditemukan");
+    }
+
+    public void kurangiStokProduk(String namaProduk, Integer jumlah) {
+        // Logika untuk mengurangi stok produk
+    }
+
     // Search products based on the search query (name, description, etc.)
     public List<PenjualanProduk> searchProduk(String searchQuery) {
         if (searchQuery != null && !searchQuery.trim().isEmpty()) {
@@ -93,5 +107,10 @@ public class PenjualanProdukService {
             return penjualanProdukRepository.findByNamaContainingIgnoreCase(searchQuery); // Case-insensitive search
         }
         return getAllProduk(); // Return all products if no search query is provided
+    }
+
+    // Metode untuk mencari produk berdasarkan nama
+    public PenjualanProduk getProdukByName(String namaProduk) {
+        return penjualanProdukRepository.findBynamaContainingIgnoreCase(namaProduk); // Cari produk berdasarkan nama
     }
 }

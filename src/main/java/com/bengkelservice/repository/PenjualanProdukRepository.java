@@ -9,4 +9,7 @@ public interface PenjualanProdukRepository extends JpaRepository<PenjualanProduk
 
     // Search products by name (case-insensitive)
     List<PenjualanProduk> findByNamaContainingIgnoreCase(String searchQuery);
+
+    // Add new method to find a single product by name (case-insensitive)
+    PenjualanProduk findBynamaContainingIgnoreCase(String nama);
 }

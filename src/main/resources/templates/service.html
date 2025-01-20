@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manajemen Jenis Service</title>
+    <link rel="stylesheet" href="/css/styles2.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar">
+    <div class="logo">
+        <img src="/images/logo_bengkel4.png" alt="Logo Bengkel">
+        <div class="navbar-text">Bengkel Sahabat Motor</div>
+    </div>
+</nav>
+
+<div class="container">
+    <h1 class="mt-5">Manajemen Layanan</h1>
+
+    <form action="/jenis-service/save" method="post" th:object="${jenisServiceMotor}">
+        <!-- Pilih Nama Pelanggan -->
+        <div class="form-group">
+            <label for="customerId">Nama Pelanggan</label>
+            <select class="form-control" id="customerId" name="customerId" required>
+                <option value="" disabled selected>Pilih Nama Customer</option>
+                <th:block th:each="customer : ${customerList}">
+                    <option th:value="${customer.id}" th:text="${customer.nama}"></option>
+                </th:block>
+            </select>
+        </div>
+
+        <!-- Input Jenis Service -->
+        <div class="form-group">
+            <label for="jenisService">Jenis Service</label>
+            <input type="text" class="form-control" id="jenisService" name="jenisService" placeholder="Masukkan jenis service" required>
+        </div>
+
+        <!-- Input Harga Service -->
+        <div class="form-group">
+            <label for="hargaService">Harga Service</label>
+            <input type="number" class="form-control" id="hargaService" name="hargaService" placeholder="Masukkan harga" required>
+        </div>
+
+        <!-- Input Mekanik -->
+        <div class="form-group">
+            <label for="mekanikId">Mekanik</label>
+            <select class="form-control" id="mekanikId" name="mekanikId" required>
+                <option value="" disabled selected>Pilih Mekanik</option>
+                <th:block th:each="mekanik : ${mekanikList}">
+                    <option th:value="${mekanik.id}" th:text="${mekanik.nama}"></option>
+                </th:block>
+            </select>
+        </div>
+
+        <!-- Pilih Produk (Opsional) -->
+        <div class="form-group">
+            <label for="produk">Produk (Opsional)</label>
+            <select multiple class="form-control" id="produk" name="produk">
+                <th:block th:each="produk : ${produkList}">
+                    <option th:value="${produk.nama}" th:text="${produk.nama}"></option>
+                </th:block>
+            </select>
+        </div>
+
+        <!-- Input Jumlah Barang -->
+        <div class="form-group">
+            <label for="jumlahBarang">Jumlah Barang</label>
+            <input type="number" class="form-control" id="jumlahBarang" name="jumlahBarang[]" placeholder="Masukkan jumlah barang">
+        </div>
+
+        <!-- Input Tanggal Pengerjaan -->
+        <div class="form-group">
+            <label for="tanggalPengerjaan">Tanggal Pengerjaan</label>
+            <input type="date" class="form-control" id="tanggalPengerjaan" name="tanggalPengerjaan" required>
+        </div>
+
+        <!-- Tombol Submit -->
+        <button type="submit" class="btn btn-primary">Simpan</button>
+    </form>
+
+
+    <h2 class="mt-4">Daftar Jenis Service</h2>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Nama Pelanggan</th>
+            <th>Jenis Service</th>
+            <th>Harga Service</th>
+            <th>Produk Terpilih</th>
+            <th>Mekanik</th>
+            <th>Total Biaya</th>
+            <th>Tanggal Pengerjaan</th>
+            <th>Aksi</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="service : ${jenisServiceList}">
+            <td th:text="${service.customer.nama}"></td>
+            <td th:text="${service.namaService}"></td>
+            <td th:text="${service.harga}"></td>
+            <td>
+                <th:block th:each="entry : ${service.produkTerpakai}">
+                    <p th:text="'Produk: ' + ${entry.key.nama} + ', Jumlah: ' + ${entry.value}"></p>
+                </th:block>
+            </td>
+            <td th:text="${service.mekanik.nama}"></td>
+            <td th:text="${service.totalBiaya}"></td>
+            <td th:text="${service.tanggalPengerjaan}"></td>
+            <td>
+                <a th:href="@{/jenis-service/edit/{id}(id=${service.id})}" class="btn btn-warning btn-sm">Edit</a>
+                <a th:href="@{/jenis-service/delete/{id}(id=${service.id})}" class="btn btn-danger btn-sm"
+                   onclick="return confirm('Yakin ingin menghapus data ini?')">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="footer">
+    <p>&copy; 2024 Bengkel Sahabat Motor. All rights reserved.</p>
+</div>
+</body>
+</html>

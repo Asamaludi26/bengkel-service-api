@@ -11,20 +11,21 @@ import java.util.List;
 public class JenisServiceMotorService {
 
     @Autowired
-    private JenisServiceMotorRepository jenisServiceMotorRepository;
+    private JenisServiceMotorRepository repository;
 
-    // Method untuk mendapatkan semua jenis service motor
-    public List<JenisServiceMotor> getAllJenisServiceMotor() {
-        return jenisServiceMotorRepository.findAll();
+    public List<JenisServiceMotor> getAllJenisService() {
+        return repository.findAll();
     }
 
-    // Method untuk mencari jenis service motor berdasarkan nama service
-    public List<JenisServiceMotor> getJenisServiceMotorByNamaService(String namaService) {
-        return jenisServiceMotorRepository.findByNamaService(namaService);
+    public void saveJenisService(JenisServiceMotor jenisServiceMotor) {
+        repository.save(jenisServiceMotor);
     }
 
-    // Method untuk menambah jenis service motor baru
-    public JenisServiceMotor addJenisServiceMotor(JenisServiceMotor jenisServiceMotor) {
-        return jenisServiceMotorRepository.save(jenisServiceMotor);
+    public JenisServiceMotor getJenisServiceById(Long id) {
+        return repository.findById(id).orElse(null);
+    }
+
+    public void deleteJenisService(Long id) {
+        repository.deleteById(id);
     }
 }
