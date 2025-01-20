@@ -14,7 +14,7 @@ public class Mekanik {
     private String nama;
     private String keahlian;
     private String nomorTelepon;
-    private String status; // Available atau Sedang Servis
+    private String status; // "Available" atau "Sedang Servis"
 
     // Getters and Setters
     public Long getId() {

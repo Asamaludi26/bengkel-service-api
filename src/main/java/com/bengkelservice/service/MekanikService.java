@@ -54,4 +54,8 @@ public class MekanikService {
 
         return mekanikRepository.findById(id);
     }
+
+    public List<Mekanik> getMekanikByStatus(String status) {
+        return mekanikRepository.findByStatus(status);
+    }
 }

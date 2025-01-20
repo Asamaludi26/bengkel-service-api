@@ -10,4 +10,6 @@ import java.util.List;
 public interface MekanikRepository extends JpaRepository<Mekanik, Long> {
 
     List<Mekanik> findByNamaContainingIgnoreCase(String nama);
+
+    List<Mekanik> findByStatus(String status);
 }

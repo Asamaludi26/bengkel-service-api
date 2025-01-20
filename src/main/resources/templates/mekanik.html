@@ -49,10 +49,17 @@
             <input type="text" class="form-control" id="nama" th:field="*{nama}" placeholder="Masukkan nama" required />
         </div>
 
-        <!-- Input Keahlian -->
+        <!-- Dropdown Keahlian -->
         <div class="form-group">
             <label for="keahlian">Keahlian</label>
-            <input type="text" class="form-control" id="keahlian" th:field="*{keahlian}" placeholder="Masukkan keahlian" required />
+            <select class="form-control" id="keahlian" th:field="*{keahlian}" required>
+                <option value="Service Mesin" th:selected="${mekanik.keahlian == 'Service Mesin'}">Service Mesin</option>
+                <option value="Pemasangan Aksesori" th:selected="${mekanik.keahlian == 'Pemasangan Aksesori'}">Pemasangan Aksesori</option>
+                <option value="Pengecekan Sistem Kelistrikan" th:selected="${mekanik.keahlian == 'Pengecekan Sistem Kelistrikan'}">Pengecekan Sistem Kelistrikan</option>
+                <option value="Perbaikan Transmisi" th:selected="${mekanik.keahlian == 'Perbaikan Transmisi'}">Perbaikan Transmisi</option>
+                <option value="Servis Rem" th:selected="${mekanik.keahlian == 'Servis Rem'}">Servis Rem</option>
+                <option value="Perawatan AC Kendaraan" th:selected="${mekanik.keahlian == 'Perawatan AC Kendaraan'}">Perawatan AC Kendaraan</option>
+            </select>
         </div>
 
         <!-- Input Nomor Telepon -->
