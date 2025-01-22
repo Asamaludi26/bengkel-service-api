@@ -65,7 +65,7 @@
         <!-- Input Nomor Telepon -->
         <div class="form-group">
             <label for="nomorTelepon">Nomor Telepon</label>
-            <input type="text" class="form-control" id="nomorTelepon" th:field="*{nomorTelepon}" placeholder="Masukkan nomor telepon" required />
+            <input type="tel" class="form-control" id="nomorTelepon" th:field="*{nomorTelepon}" placeholder="Masukkan nomor telepon" required pattern="[0-9]{10,15}" title="Masukkan nomor telepon yang valid (10-15 digit)" />
         </div>
 
         <!-- Dropdown Status -->

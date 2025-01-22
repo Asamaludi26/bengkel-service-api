@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+import java.util.stream.Collectors; // <-- Add this import
 
 @Controller
 @RequestMapping("/customer")
@@ -28,15 +28,17 @@ public class CustomerController {
         List<Mekanik> mekanikList = mekanikService.getAllMekanik();
 
         // Cek apakah semua mekanik sibuk
-        boolean allMekanikBusy = mekanikList.stream().allMatch(mekanik -> "Sedang Servis".equals(mekanik.getStatus()));
+        boolean allMekanikBusy = mekanikList.stream().allMatch(mekanik -> "Busy".equals(mekanik.getStatus()));
 
         model.addAttribute("mekanikList", mekanikList);
         model.addAttribute("customerList", customerList);
         model.addAttribute("customer", new Customer());
-        model.addAttribute("allMekanikBusy", allMekanikBusy); // Flag to indicate if all mechanics are busy
+        model.addAttribute("allMekanikBusy", allMekanikBusy); // Flag untuk status apakah semua mekanik sibuk
 
         return "customer"; // Render customer.html
     }
+
+
 
     // Menyimpan data customer baru atau update
     @PostMapping("/save")
@@ -44,13 +46,26 @@ public class CustomerController {
         Mekanik mekanik = mekanikService.findById(customer.getMekanikId()).orElse(null); // Menemukan mekanik berdasarkan ID
         customer.setMekanik(mekanik); // Set mekanik pada customer
         customerService.addCustomer(customer); // Menyimpan customer
+        // Update status mekanik menjadi "Busy"
+        if (mekanik != null) {
+            mekanik.setStatus("Busy");
+            mekanikService.addMekanik(mekanik); // Update status mekanik
+        }
         return "redirect:/customer/all"; // Kembali ke halaman daftar
     }
 
     // Menghapus customer berdasarkan ID
     @GetMapping("/delete/{id}")
     public String deleteCustomer(@PathVariable Long id) {
-        customerService.deleteCustomer(id);
+        Customer customer = customerService.findById(id).orElse(null);
+        if (customer != null) {
+            Mekanik mekanik = customer.getMekanik();
+            if (mekanik != null) {
+                mekanik.setStatus("Available"); // Mengubah status mekanik kembali ke Available
+                mekanikService.addMekanik(mekanik);
+            }
+            customerService.deleteCustomer(id);
+        }
         return "redirect:/customer/all"; // Kembali ke halaman daftar
     }
 
@@ -60,7 +75,7 @@ public class CustomerController {
         Customer customer = customerService.findById(id)
                 .orElse(new Customer()); // Default to new Customer if not found
         List<Mekanik> mekanikList = mekanikService.getAllMekanik();
-        boolean allMekanikBusy = mekanikList.stream().allMatch(mekanik -> "Sedang Servis".equals(mekanik.getStatus()));
+        boolean allMekanikBusy = mekanikList.stream().allMatch(mekanik -> "Busy".equals(mekanik.getStatus()));
 
         model.addAttribute("mekanikList", mekanikList);
         model.addAttribute("customer", customer);
@@ -77,7 +92,7 @@ public class CustomerController {
                 : customerService.getAllCustomer();
 
         List<Mekanik> mekanikList = mekanikService.getAllMekanik();
-        boolean allMekanikBusy = mekanikList.stream().allMatch(mekanik -> "Sedang Servis".equals(mekanik.getStatus()));
+        boolean allMekanikBusy = mekanikList.stream().allMatch(mekanik -> "Busy".equals(mekanik.getStatus()));
         model.addAttribute("mekanikList", mekanikList); // Kirim mekanik dengan status Available
         model.addAttribute("customerList", customerList);
         model.addAttribute("customer", new Customer());

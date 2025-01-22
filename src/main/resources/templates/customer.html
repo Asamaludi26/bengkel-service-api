@@ -52,15 +52,15 @@
 
                 <div class="form-group">
                     <label for="mekanik">Pilih Mekanik</label>
-                    <select class="form-control" id="mekanik" name="mekanikId" required>
+
+                    <!-- Jika semua mekanik sibuk, tampilkan warning box -->
+                    <div th:if="${allMekanikBusy}" class="alert alert-warning">
+                        Maaf untuk saat ini mekanik sedang sibuk, mohon menunggu.
+                    </div>
+
+                    <!-- Jika ada mekanik yang tersedia, tampilkan dropdown -->
+                    <select th:if="${!allMekanikBusy}" class="form-control" id="mekanik" name="mekanikId" required>
                         <option value="" disabled selected>Pilih Mekanik</option>
-
-                        <!-- Show message if all mechanics are busy -->
-                        <option th:if="${allMekanikBusy}" disabled>
-                            Mekanik sedang sibuk, mohon sabar menunggu
-                        </option>
-
-                        <!-- Display only available mechanics -->
                         <option th:each="mekanik : ${mekanikList}"
                                 th:value="${mekanik.id}"
                                 th:text="${mekanik.nama}"
@@ -88,7 +88,12 @@
                     <td th:text="${customer.nama}"></td>
                     <td th:text="${customer.alamat}"></td>
                     <td th:text="${customer.telepon}"></td>
-                    <td th:text="${customer.mekanik != null ? customer.mekanik.nama : 'Belum Dipilih'}"></td>
+                    <td>
+                        <span th:text="${customer.mekanik != null ? customer.mekanik.nama : 'Belum Dipilih'}"></span>
+                        <span th:if="${customer.mekanik != null && customer.mekanik.status == 'Busy'}" class="badge badge-danger">
+                                (Dalam Antrean)
+                            </span>
+                    </td>
                     <td>
                         <a th:href="@{/customer/edit/{id}(id=${customer.id})}" class="btn btn-warning btn-sm">Edit</a>
                         <a th:href="@{/customer/delete/{id}(id=${customer.id})}" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus data ini?')">Delete</a>
