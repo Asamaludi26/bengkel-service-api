@@ -49,16 +49,23 @@
             <input type="text" class="form-control" id="nama" th:field="*{nama}" placeholder="Masukkan nama" required />
         </div>
 
-        <!-- Input Keahlian -->
+        <!-- Dropdown Keahlian -->
         <div class="form-group">
             <label for="keahlian">Keahlian</label>
-            <input type="text" class="form-control" id="keahlian" th:field="*{keahlian}" placeholder="Masukkan keahlian" required />
+            <select class="form-control" id="keahlian" th:field="*{keahlian}" required>
+                <option value="Service Mesin" th:selected="${mekanik.keahlian == 'Service Mesin'}">Service Mesin</option>
+                <option value="Pemasangan Aksesori" th:selected="${mekanik.keahlian == 'Pemasangan Aksesori'}">Pemasangan Aksesori</option>
+                <option value="Pengecekan Sistem Kelistrikan" th:selected="${mekanik.keahlian == 'Pengecekan Sistem Kelistrikan'}">Pengecekan Sistem Kelistrikan</option>
+                <option value="Perbaikan Transmisi" th:selected="${mekanik.keahlian == 'Perbaikan Transmisi'}">Perbaikan Transmisi</option>
+                <option value="Servis Rem" th:selected="${mekanik.keahlian == 'Servis Rem'}">Servis Rem</option>
+                <option value="Perawatan AC Kendaraan" th:selected="${mekanik.keahlian == 'Perawatan AC Kendaraan'}">Perawatan AC Kendaraan</option>
+            </select>
         </div>
 
         <!-- Input Nomor Telepon -->
         <div class="form-group">
             <label for="nomorTelepon">Nomor Telepon</label>
-            <input type="text" class="form-control" id="nomorTelepon" th:field="*{nomorTelepon}" placeholder="Masukkan nomor telepon" required />
+            <input type="tel" class="form-control" id="nomorTelepon" th:field="*{nomorTelepon}" placeholder="Masukkan nomor telepon" required pattern="[0-9]{10,15}" title="Masukkan nomor telepon yang valid (10-15 digit)" />
         </div>
 
         <!-- Dropdown Status -->
@@ -76,7 +83,13 @@
 
     <!-- Tabel Data Mekanik -->
     <h2 class="mt-4">Data Mekanik</h2>
-    <table class="table table-striped mt-3">
+
+    <!-- Box Peringatan jika Data Mekanik Kosong -->
+    <div th:if="${#lists.isEmpty(mekaniklist)}" class="alert alert-warning">
+        <strong>Data mekanik belum ada, silahkan tambahkan mekanik terlebih dahulu!</strong>
+    </div>
+
+    <table class="table table-striped mt-3" th:if="${!#lists.isEmpty(mekaniklist)}">
         <thead>
         <tr>
             <th>Nama</th> <!-- Kolom nama -->

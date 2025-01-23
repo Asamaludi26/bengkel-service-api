@@ -46,7 +46,7 @@
 
     <!-- Product Form for Add or Edit -->
     <form action="/penjualan/save" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="id" th:value="${penjualanProduk.id}" />
+        <input type="hidden" name="id" th:value="${penjualanProduk.id}" /> <!-- Produk ID -->
 
         <div class="form-group">
             <label for="nama">Nama Produk</label>
@@ -79,7 +79,14 @@
     </form>
 
     <h2 class="mt-4">Daftar Produk</h2>
-    <table class="table table-striped">
+
+    <!-- Box warning if no product data -->
+    <div th:if="${#lists.isEmpty(produkList)}" class="alert alert-warning">
+        <strong>Data produk belum ada, silahkan tambahkan produk terlebih dahulu!</strong>
+    </div>
+
+    <!-- Table to Display Products -->
+    <table class="table table-striped" th:if="${!#lists.isEmpty(produkList)}">
         <thead>
         <tr>
             <th>Nama</th>
@@ -108,6 +115,7 @@
         </tbody>
     </table>
 </div>
+
 <div class="footer">
     <p>&copy; 2024 Bengkel Sahabat Motor. All rights reserved.</p> <!-- Hak cipta -->
 </div>

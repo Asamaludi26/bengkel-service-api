@@ -56,6 +56,8 @@ public class MekanikController {
     public String showEditForm(@PathVariable Long id, Model model) {
         Optional<Mekanik> mekanik = mekanikService.findById(id);
         if (mekanik.isPresent()) {
+            List<Mekanik> mekaniklist = mekanikService.getAllMekanik();
+            model.addAttribute("mekaniklist", mekaniklist);
             model.addAttribute("mekanik", mekanik.get()); // Mengisi model dengan data mekanik yang akan diedit
             return "mekanik"; // Mengembalikan nama template untuk form edit
         }

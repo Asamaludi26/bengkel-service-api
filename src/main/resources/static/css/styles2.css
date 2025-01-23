@@ -5,13 +5,16 @@
     box-sizing: border-box;
 }
 
+html, body {
+    height: 100%; /* Memastikan body memenuhi tinggi layar */
+}
+
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f8f9fa; /* Warna latar belakang lembut */
     color: #333; /* Warna teks utama */
     display: flex;
     flex-direction: column; /* Kolom fleksibel untuk tata letak */
-    min-height: 100vh; /* Memastikan body memenuhi tinggi layar */
 }
 
 /* Navbar styles */
@@ -46,10 +49,11 @@ body {
     margin-left: 0; /* Pastikan teks berada langsung di sebelah logo */
 }
 
-/* Container adjustments */
-.container {
-    margin-top: 80px; /* Memberikan ruang untuk navbar tetap */
+/* Main content */
+.main-content {
+    flex-grow: 1; /* Memastikan konten utama memenuhi ruang kosong */
     padding: 20px;
+    margin-top: 70px; /* Menyesuaikan posisi setelah navbar */
 }
 
 /* Dashboard styles */
@@ -103,13 +107,12 @@ h1, h2 {
 
 /* Footer styles */
 .footer {
-    text-align: center;
     background-color: #007bff;
     color: #fff;
-    padding: 10px;
-    position: relative;
-    bottom: 0;
-    width: 100%;
+    padding: 15px;
+    text-align: center;
+    margin-top: auto; /* Menempatkan footer di bagian bawah */
+    width: 100%; /* Pastikan footer full layar */
 }
 
 /* Responsiveness */
