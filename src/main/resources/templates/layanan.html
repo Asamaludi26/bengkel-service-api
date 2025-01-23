@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:c="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Layanan</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0-alpha1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="/css/styles2.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo">
+        <img src="/images/logo_bengkel4.png" alt="Logo Bengkel" />
+        <div class="navbar-text">Bengkel Sahabat Motor</div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <h1>Input Layanan</h1>
+
+    <div class="d-flex justify-content-between mb-3">
+        <form action="/customer/search" method="get" class="form-inline mb-3">
+            <label>
+                <input type="text" name="searchQuery" class="form-control mr-2" placeholder="Search by name" />
+            </label>
+            <button type="submit" class="btn btn-primary">Search</button>
+            <button type="button" id="resetButton" class="btn btn-secondary ml-2">Reset</button>
+        </form>
+
+        <button type="button" id="homeButton" class="btn btn-primary" onclick="window.location.href='/'">Kembali ke Dashboard</button>
+    </div>
+
+    <form id="submitForm" method="POST" action="/layanan/save">
+        <!-- Pilihan Layanan -->
+        <div class="mb-3">
+            <label for="layananType" class="form-label">Pilih Jenis Layanan</label>
+            <select id="layananType" name="layananType" class="form-control" required>
+                <option value="">-- Pilih Layanan --</option>
+                <option value="ringan">Layanan Ringan</option>
+                <option value="full">Layanan Full</option>
+            </select>
+        </div>
+
+        <!-- Form tambahan untuk layanan -->
+        <div id="additionalLayanan"></div>
+
+        <!-- Customer dropdown -->
+        <div class="mb-3">
+            <label for="customerId" class="form-label">Pilih Customer</label>
+            <select id="customerId" name="customerId" class="form-control" required>
+                <option value="">-- Pilih Customer --</option>
+                <!-- Data customer yang diambil dari controller -->
+                <th:block th:each="customer : ${customerList}">
+                    <option th:value="${customer.id}" th:text="${customer.nama}"></option>
+                </th:block>
+            </select>
+        </div>
+
+        <!-- Tampilkan Total Harga -->
+        <div class="mb-3">
+            <label class="form-label">Total Harga:</label>
+            <input type="text" id="totalPrice" class="form-control" readonly>
+        </div>
+
+        <button type="submit" class="btn btn-success mt-3">Simpan</button>
+    </form>
+</div>
+
+<div class="footer">
+    <p>&copy; 2024 Bengkel Sahabat Motor. All rights reserved.</p>
+</div>
+
+
+<script>
+    $(document).ready(function() {
+        // Ketika memilih jenis layanan
+        $('#layananType').change(function() {
+            var selectedLayanan = $(this).val();
+            $('#additionalLayanan').empty(); // Kosongkan form tambahan sebelum diisi
+
+            if (selectedLayanan === 'ringan') {
+                var layanan = `
+                    <div class="form-group">
+                        <label for="layananDetail">Pilih Cakupan Servis Ringan</label>
+                        <div class="form-check">
+                            <input type="checkbox" name="layananDetails[]" value="Pemasangan Aksesoris" class="form-check-input">
+                            <label class="form-check-label">Pemasangan Aksesoris (Rp 100.000)</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" name="layananDetails[]" value="Pengecekan Kelistrikan" class="form-check-input">
+                            <label class="form-check-label">Pengecekan Kelistrikan (Rp 150.000)</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" name="layananDetails[]" value="Pengecekan Transmisi" class="form-check-input">
+                            <label class="form-check-label">Pengecekan Transmisi (Rp 200.000)</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" name="layananDetails[]" value="Pengecekan Rem" class="form-check-input">
+                            <label class="form-check-label">Pengecekan Rem (Rp 120.000)</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" name="layananDetails[]" value="Pengecekan Mesin" class="form-check-input">
+                            <label class="form-check-label">Pengecekan Mesin (Rp 250.000)</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" name="layananDetails[]" value="Perawatan Kendaraan" class="form-check-input">
+                            <label class="form-check-label">Perawatan Kendaraan (Rp 300.000)</label>
+                        </div>
+                    </div>
+                `;
+                $('#additionalLayanan').append(layanan);
+            } else if (selectedLayanan === 'full') {
+                var layanan = `
+                    <div class="form-group">
+                        <label for="layananDetail">Pilih Cakupan Servis Full</label>
+                        <div class="form-check">
+                            <input type="checkbox" name="layananDetails[]" value="Pengecekan & Perbaikan Kelistrikan" class="form-check-input">
+                            <label class="form-check-label">Pengecekan & Perbaikan Kelistrikan (Rp 500.000)</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" name="layananDetails[]" value="Pengecekan & Perbaikan Transmisi" class="form-check-input">
+                            <label class="form-check-label">Pengecekan & Perbaikan Transmisi (Rp 600.000)</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" name="layananDetails[]" value="Pengecekan & Perbaikan Sistem Pengereman" class="form-check-input">
+                            <label class="form-check-label">Pengecekan & Perbaikan Sistem Pengereman (Rp 450.000)</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" name="layananDetails[]" value="Pengecekan & Perbaikan Mesin" class="form-check-input">
+                            <label class="form-check-label">Pengecekan & Perbaikan Mesin (Rp 800.000)</label>
+                        </div>
+                    </div>
+                `;
+                $('#additionalLayanan').append(layanan);
+            }
+        });
+
+        // Mengupdate total harga ketika memilih layanan
+        $('form').on('change', 'input[name="layananDetails[]"]', function() {
+            var totalPrice = 0;
+
+            $('input[name="layananDetails[]"]:checked').each(function() {
+                var servicePrice = 0;
+                switch ($(this).val()) {
+                    case "Pemasangan Aksesoris":
+                        servicePrice = 100000;
+                        break;
+                    case "Pengecekan Kelistrikan":
+                        servicePrice = 150000;
+                        break;
+                    case "Pengecekan Transmisi":
+                        servicePrice = 200000;
+                        break;
+                    case "Pengecekan Rem":
+                        servicePrice = 120000;
+                        break;
+                    case "Pengecekan Mesin":
+                        servicePrice = 250000;
+                        break;
+                    case "Perawatan Kendaraan":
+                        servicePrice = 300000;
+                        break;
+                    case "Pengecekan & Perbaikan Kelistrikan":
+                        servicePrice = 500000;
+                        break;
+                    case "Pengecekan & Perbaikan Transmisi":
+                        servicePrice = 600000;
+                        break;
+                    case "Pengecekan & Perbaikan Sistem Pengereman":
+                        servicePrice = 450000;
+                        break;
+                    case "Pengecekan & Perbaikan Mesin":
+                        servicePrice = 800000;
+                        break;
+                }
+                totalPrice += servicePrice;
+            });
+
+            var formattedTotalPrice = new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR'
+            }).format(totalPrice);
+
+            $('#totalPrice').val(formattedTotalPrice);  // Update total price
+        });
+    });
+</script>
+
+</body>
+</html>
