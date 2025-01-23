@@ -58,8 +58,13 @@
                         Maaf untuk saat ini mekanik sedang sibuk, mohon menunggu.
                     </div>
 
+                    <!-- Jika tidak ada mekanik, tampilkan warning box -->
+                    <div th:if="${#lists.isEmpty(mekanikList)}" class="alert alert-warning">
+                        <strong>Tidak ada mekanik, mari rekrut!</strong>
+                    </div>
+
                     <!-- Jika ada mekanik yang tersedia, tampilkan dropdown -->
-                    <select th:if="${!allMekanikBusy}" class="form-control" id="mekanik" name="mekanikId" required>
+                    <select th:if="${!allMekanikBusy && !#lists.isEmpty(mekanikList)}" class="form-control" id="mekanik" name="mekanikId" required>
                         <option value="" disabled selected>Pilih Mekanik</option>
                         <option th:each="mekanik : ${mekanikList}"
                                 th:value="${mekanik.id}"
@@ -73,7 +78,14 @@
             </form>
 
             <h2 class="mt-4">Data Pelanggan</h2>
-            <table class="table table-striped mt-3">
+
+            <!-- Box warning if no customer data -->
+            <div th:if="${#lists.isEmpty(customerList)}" class="alert alert-warning">
+                <strong>Data pelanggan belum ada, silahkan tambahkan pelanggan terlebih dahulu!</strong>
+            </div>
+
+            <!-- Table to Display Customers -->
+            <table class="table table-striped mt-3" th:if="${!#lists.isEmpty(customerList)}">
                 <thead>
                 <tr>
                     <th>Nama</th>

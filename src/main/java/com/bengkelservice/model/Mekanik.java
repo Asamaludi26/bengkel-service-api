@@ -1,10 +1,9 @@
 package com.bengkelservice.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Column; // Import Column
+import jakarta.persistence.*;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 public class Mekanik {
@@ -21,6 +20,17 @@ public class Mekanik {
     private String nomorTelepon; // Nama properti di Java
 
     private String status; // "Available" atau "Sedang Servis"
+
+    @OneToMany(mappedBy = "mekanik")
+    private Set<Customer> customers = new LinkedHashSet<>();
+
+    public Set<Customer> getCustomers() {
+        return customers;
+    }
+
+    public void setCustomers(Set<Customer> customers) {
+        this.customers = customers;
+    }
 
     // Getters and Setters
     public Long getId() {

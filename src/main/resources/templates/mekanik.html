@@ -83,7 +83,13 @@
 
     <!-- Tabel Data Mekanik -->
     <h2 class="mt-4">Data Mekanik</h2>
-    <table class="table table-striped mt-3">
+
+    <!-- Box Peringatan jika Data Mekanik Kosong -->
+    <div th:if="${#lists.isEmpty(mekaniklist)}" class="alert alert-warning">
+        <strong>Data mekanik belum ada, silahkan tambahkan mekanik terlebih dahulu!</strong>
+    </div>
+
+    <table class="table table-striped mt-3" th:if="${!#lists.isEmpty(mekaniklist)}">
         <thead>
         <tr>
             <th>Nama</th> <!-- Kolom nama -->
