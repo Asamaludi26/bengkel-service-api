@@ -51,4 +51,8 @@ public class CustomerService {
     public Optional<Customer> findById(Long id) {
         return customerRepository.findById(id);
     }
+
+    public List<Customer> findAll() {
+        return customerRepository.findAll();  // Fetch all customers from the database
+    }
 }
