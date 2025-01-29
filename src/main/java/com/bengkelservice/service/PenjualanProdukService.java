@@ -29,69 +29,62 @@ public class PenjualanProdukService {
 
     public void uploadFile(MultipartFile file) {
         try {
-            // Ensure the upload directory exists
             File directory = new File(uploadDir);
             if (!directory.exists()) {
-                directory.mkdirs(); // Create the directory if it doesn't exist
+                directory.mkdirs();
             }
 
-            // Create the destination file
             File destinationFile = new File(uploadDir, file.getOriginalFilename());
             file.transferTo(destinationFile);
         } catch (IOException e) {
             logger.error("Failed to upload file: {}", e.getMessage());
-            // Handle the exception appropriately
         }
     }
 
     // Get all products
     public List<PenjualanProduk> getAllProduk() {
-        return penjualanProdukRepository.findAll(); // Fetch all products from the database
+        return penjualanProdukRepository.findAll();
     }
 
     // Save or update a product
     public void saveProduk(PenjualanProduk penjualanProduk) {
-        penjualanProdukRepository.save(penjualanProduk); // Save or update the product in the database
+        penjualanProdukRepository.save(penjualanProduk);
     }
 
     // Get a product by ID
     public PenjualanProduk getProdukById(Long id) {
-        return penjualanProdukRepository.findById(id).orElse(null); // Find a product by ID
+        return penjualanProdukRepository.findById(id).orElse(null);
     }
 
-    // Delete a product by ID, and remove the associated image file
+    // Delete a product by ID
     public void deleteProduk(Long id) {
-        // Fetch the product to get the filename
         PenjualanProduk produk = penjualanProdukRepository.findById(id).orElse(null);
         if (produk != null && produk.getFoto() != null) {
-            String fileName = produk.getFoto(); // Get the filename of the image
-            deleteFile(fileName); // Call the deleteFile method to delete the image from the uploads folder
+            deleteFile(produk.getFoto());
         }
-
-        // Now delete the product from the database
-        penjualanProdukRepository.deleteById(id); // Delete the product from the database
+        penjualanProdukRepository.deleteById(id);
     }
 
-    // Method to delete the file from the uploads folder
     private void deleteFile(String fileName) {
-        // Define the path to the uploads folder
         Path filePath = Paths.get(uploadDir, fileName);
-
         try {
-            // Delete the file if it exists
             Files.deleteIfExists(filePath);
         } catch (IOException e) {
             logger.error("Failed to delete file: {}", e.getMessage());
-            // You may want to log the error here
         }
     }
 
-    // Search products based on the search query (name, description, etc.)
+    // Search products
     public List<PenjualanProduk> searchProduk(String searchQuery) {
         if (searchQuery != null && !searchQuery.trim().isEmpty()) {
-            // Example of searching by name (you can customize this to search other fields)
-            return penjualanProdukRepository.findByNamaContainingIgnoreCase(searchQuery); // Case-insensitive search
+            return penjualanProdukRepository.findByNamaContainingIgnoreCase(searchQuery);
         }
-        return getAllProduk(); // Return all products if no search query is provided
+        return getAllProduk();
+    }
+
+    // Get harga produk berdasarkan ID
+    public int getHarga(Long produkId) {
+        PenjualanProduk produk = getProdukById(produkId);
+        return produk != null ? produk.getHarga() : 0;
     }
 }

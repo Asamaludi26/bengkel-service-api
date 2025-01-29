@@ -22,7 +22,7 @@ public class PenjualanProduk {
     private String foto; // File name or path of the image
 
     @NotNull(message = "Harga tidak boleh kosong")
-    private Double harga;
+    private Integer harga;
 
     @NotNull(message = "Stok tidak boleh kosong")
     private Integer stok;
@@ -56,11 +56,11 @@ public class PenjualanProduk {
         this.foto = foto;
     }
 
-    public Double getHarga() {
+    public Integer getHarga() {
         return harga;
     }
 
-    public void setHarga(Double harga) {
+    public void setHarga(int harga) {
         this.harga = harga;
     }
 

@@ -1,43 +1,54 @@
 package com.bengkelservice.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.List;
+import com.bengkelservice.model.PenjualanProduk;
+
+
+import java.time.LocalDate;
 
 @Entity
 public class Layanan {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String layananName;
-    private String layananCategory;
+
+    @ManyToOne
+    private Customer customer;
+
+    private String jenisLayanan;
+
     private String layananType;
-    private int harga; // Tambahkan field harga
+
+    @ManyToMany
+    private List<PenjualanProduk> produkList;
+
+    private Integer totalBiaya;
+
+    private LocalDate tanggal;
 
     // Getter dan Setter
-    public Long getId() {
-        return id;
+    public Long getMekanikId() {
+        // Mengambil mekanikId langsung dari customer
+        return customer != null ? customer.getMekanikId() : null;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public String getLayananName() {
-        return layananName;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
-    public void setLayananName(String layananName) {
-        this.layananName = layananName;
+    public String getJenisLayanan() {
+        return jenisLayanan;
     }
 
-    public String getLayananCategory() {
-        return layananCategory;
-    }
-
-    public void setLayananCategory(String layananCategory) {
-        this.layananCategory = layananCategory;
+    public void setJenisLayanan(String jenisLayanan) {
+        this.jenisLayanan = jenisLayanan;
     }
 
     public String getLayananType() {
@@ -48,11 +59,27 @@ public class Layanan {
         this.layananType = layananType;
     }
 
-    public int getHarga() {
-        return harga;
+    public List<PenjualanProduk> getProdukList() {
+        return produkList;
     }
 
-    public void setHarga(int harga) {
-        this.harga = harga;
+    public void setProdukList(List<PenjualanProduk> produkList) {
+        this.produkList = produkList;
+    }
+
+    public Integer getTotalBiaya() {
+        return totalBiaya;
+    }
+
+    public void setTotalBiaya(Integer totalBiaya) {
+        this.totalBiaya = totalBiaya;
+    }
+
+    public LocalDate getTanggal() {
+        return tanggal;
+    }
+
+    public void setTanggal(LocalDate tanggal) {
+        this.tanggal = tanggal;
     }
 }
