@@ -1,11 +1,9 @@
 <!DOCTYPE html>
-<html lang="id" xmlns:c="">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Input Layanan</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0-alpha1/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Bengkel Service</title>
     <link rel="stylesheet" href="/css/styles2.css">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
@@ -18,62 +16,114 @@
     </div>
 </nav>
 
-<div class="container mt-5">
-    <h1>Input Layanan</h1>
+<div class="container">
+    <main class="main-content">
+        <div class="dashboard-container">
+            <h1 class="mt-5">Data Layanan Sahabat Motor</h1>
 
-    <div class="d-flex justify-content-between mb-3">
-        <form action="/customer/search" method="get" class="form-inline mb-3">
-            <label>
-                <input type="text" name="searchQuery" class="form-control mr-2" placeholder="Search by name" />
-            </label>
-            <button type="submit" class="btn btn-primary">Search</button>
-            <button type="button" id="resetButton" class="btn btn-secondary ml-2">Reset</button>
-        </form>
+            <!-- Form pencarian -->
+            <div class="d-flex justify-content-between mb-3">
+                <form action="/layanan/search" method="get" class="form-inline mb-3">
+                    <label>
+                        <input type="text" name="searchQuery" class="form-control mr-2" placeholder="Search by name" />
+                    </label>
+                    <button type="submit" class="btn btn-primary">Search</button>
+                    <button type="button" id="resetButton" class="btn btn-secondary ml-2">Reset</button>
+                </form>
 
-        <button type="button" id="homeButton" class="btn btn-primary" onclick="window.location.href='/'">Kembali ke Dashboard</button>
-    </div>
+                <button type="button" id="homeButton" class="btn btn-primary" onclick="window.location.href='/'">Kembali ke Dashboard</button>
+            </div>
 
-    <form id="submitForm" method="POST" action="/layanan/save">
-        <!-- Pilihan Layanan -->
-        <div class="mb-3">
-            <label for="layananType" class="form-label">Pilih Jenis Layanan</label>
-            <select id="layananType" name="layananType" class="form-control" required>
-                <option value="">-- Pilih Layanan --</option>
-                <option value="ringan">Layanan Ringan</option>
-                <option value="full">Layanan Full</option>
-            </select>
+            <!-- Form Input/Edit Layanan -->
+            <h2 class="mt-4">Tambah/Edit Layanan</h2>
+            <!-- Pilih Jenis Layanan -->
+            <form id="submitForm" method="POST" action="/layanan/save">
+                <!-- Pilihan Layanan -->
+                <div class="mb-3">
+                    <label for="layananType" class="form-label">Pilih Jenis Layanan</label>
+                    <select id="layananType" name="layananType" class="form-control" required>
+                        <option value="">-- Pilih Layanan --</option>
+                        <option value="ringan">Layanan Ringan</option>
+                        <option value="full">Layanan Full</option>
+                    </select>
+                </div>
+
+                <!-- Form tambahan untuk layanan -->
+                <div id="additionalLayanan"></div>
+
+                <!-- Customer dropdown -->
+                <div class="mb-3">
+                    <label for="customerId" class="form-label">Pilih Customer</label>
+                    <select id="customerId" name="customerId" class="form-control" required>
+                        <option value="">-- Pilih Customer --</option>
+                        <th:block th:each="customer : ${customerList}">
+                            <option th:value="${customer.id}" th:text="${customer.nama}"></option>
+                        </th:block>
+                    </select>
+                </div>
+
+                <!-- Pilih Produk yang Dibeli -->
+                <div class="form-group">
+                    <label>Produk yang Dibeli</label>
+                    <button type="button" id="addProduct" class="btn btn-success mb-3">+ Tambah Produk</button>
+                    <div id="productList" class="mt-3"></div>
+                </div>
+
+                <!-- Tampilkan Total Harga -->
+                <div class="mb-3">
+                    <label class="form-label">Total Harga:</label>
+                    <input type="text" id="totalPrice" class="form-control" readonly>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Simpan</button>
+            </form>
+
+            <!-- Tabel Data Layanan -->
+            <h2 class="mt-4">Data Layanan</h2>
+
+            <div th:if="${#lists.isEmpty(layananList)}" class="alert alert-warning">
+                <strong>Data layanan belum ada, silahkan tambahkan layanan terlebih dahulu!</strong>
+            </div>
+
+            <table class="table table-striped mt-3" th:if="${!#lists.isEmpty(layananList)}">
+                <thead>
+                <tr>
+                    <th>Nama Customer</th>
+                    <th>Jenis Layanan</th>
+                    <th>Produk yang Dibeli</th>
+                    <th>Mekanik</th>
+                    <th>Total Biaya</th>
+                    <th>Tanggal</th>
+                    <th>Aksi</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="layanan : ${layananList}">
+                    <td th:text="${layanan.customer.nama}"></td>
+                    <td th:text="${layanan.layananType}"></td>
+                    <td>
+                        <span th:each="produk : ${layanan.produkList}" th:text="${produk.nama} + ' (' + produk.jumlah + ')'"></span>
+                    </td>
+                    <td th:text="${layanan.customer.mekanik.nama != null ? layanan.customer.mekanik.nama : 'Belum Dipilih'}"></td>
+                    <td th:text="${layanan.totalBiaya}"></td>
+                    <td th:text="${layanan.tanggal}"></td>
+                    <td>
+                        <!--- <a th:href="@{/layanan/edit/{id}(id=${layanan.id})}" class="btn btn-warning btn-sm">Edit</a>
+                        <a th:href="@{/layanan/delete/{id}(id=${layanan.id})}" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus data ini?')">Delete</a> --->
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
-
-        <!-- Form tambahan untuk layanan -->
-        <div id="additionalLayanan"></div>
-
-        <!-- Customer dropdown -->
-        <div class="mb-3">
-            <label for="customerId" class="form-label">Pilih Customer</label>
-            <select id="customerId" name="customerId" class="form-control" required>
-                <option value="">-- Pilih Customer --</option>
-                <!-- Data customer yang diambil dari controller -->
-                <th:block th:each="customer : ${customerList}">
-                    <option th:value="${customer.id}" th:text="${customer.nama}"></option>
-                </th:block>
-            </select>
-        </div>
-
-        <!-- Tampilkan Total Harga -->
-        <div class="mb-3">
-            <label class="form-label">Total Harga:</label>
-            <input type="text" id="totalPrice" class="form-control" readonly>
-        </div>
-
-        <button type="submit" class="btn btn-success mt-3">Simpan</button>
-    </form>
+    </main>
 </div>
 
 <div class="footer">
     <p>&copy; 2024 Bengkel Sahabat Motor. All rights reserved.</p>
 </div>
 
-
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     $(document).ready(function() {
         // Ketika memilih jenis layanan
@@ -188,6 +238,81 @@
         });
     });
 </script>
+<script>
+    $(document).ready(function () {
+        // Load customer dari server
+        $.ajax({
+            url: '/layanan/customers',
+            method: 'GET',
+            success: function (data) {
+                let customerOptions = '<option value="" disabled selected>Pilih Customer</option>';
+                data.forEach(customer => {
+                    customerOptions += `<option value="${customer.id}">${customer.nama}</option>`;
+                });
+                $('#customerName').html(customerOptions);
+            },
+            error: function () {
+                alert('Gagal memuat daftar customer.');
+            }
+        });
 
+        // Load mekanik dari server
+        $.ajax({
+            url: '/layanan/mekaniks',
+            method: 'GET',
+            success: function (data) {
+                let mekanikOptions = '<option value="" disabled selected>Pilih Mekanik</option>';
+                data.forEach(mekanik => {
+                    mekanikOptions += `<option value="${mekanik.id}">${mekanik.nama}</option>`;
+                });
+                $('#mekanik').html(mekanikOptions);
+            },
+            error: function () {
+                alert('Gagal memuat daftar mekanik.');
+            }
+        });
+
+            });
+        });
+    });
+</script>
+<<script>
+    $(document).ready(function () {
+        // Event listener untuk tombol "Tambah Produk"
+        $('#addProduct').on('click', function () {
+            // Kosongkan daftar produk sebelum memuat ulang
+            $('#productList').empty();
+
+            // Panggil endpoint untuk mendapatkan daftar produk
+            $.ajax({
+                url: '/layanan/produk/list', // Endpoint untuk mendapatkan produk
+                method: 'GET',
+                success: function (data) {
+                    if (data.length > 0) {
+                        // Iterasi data produk dan tambahkan ke daftar
+                        data.forEach(function (produk) {
+                            $('#productList').append(`
+                                <div class="d-flex align-items-center mb-3">
+                                    <img src="/images/${produk.foto}" alt="${produk.nama}" class="img-thumbnail mr-2" style="width: 50px; height: 50px;">
+                                    <div class="flex-grow-1">
+                                        <strong>${produk.nama}</strong> <br>
+                                        <small>Harga: Rp ${produk.harga.toLocaleString('id-ID')}</small>
+                                    </div>
+                                    <input type="number" name="produk[${produk.id}]" min="1" max="${produk.stok}" class="form-control ml-3" placeholder="Jumlah">
+                                </div>
+                            `);
+                        });
+                    } else {
+                        // Jika tidak ada produk
+                        $('#productList').append('<p class="text-muted">Tidak ada produk yang tersedia.</p>');
+                    }
+                },
+                error: function () {
+                    alert('Gagal memuat daftar produk. Pastikan server berjalan dengan benar.');
+                }
+            });
+        });
+    });
+</script>
 </body>
 </html>
