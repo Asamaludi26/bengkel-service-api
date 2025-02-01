@@ -38,6 +38,8 @@
             <h2 class="mt-4">Tambah/Edit Layanan</h2>
             <!-- Pilih Jenis Layanan -->
             <form id="submitForm" method="POST" action="/layanan/save">
+                <input type="hidden" name="produkIds" id="produkIds">
+
                 <!-- Pilihan Layanan -->
                 <div class="mb-3">
                     <label for="layananType" class="form-label">Pilih Jenis Layanan</label>
@@ -62,7 +64,7 @@
                     </select>
                 </div>
 
-                <!-- Pilih Produk yang Dibeli -->
+                <!-- Tambah Produk yang Dibeli -->
                 <div class="form-group">
                     <label>Produk yang Dibeli</label>
                     <button type="button" id="addProduct" class="btn btn-success mb-3">+ Tambah Produk</button>
@@ -73,6 +75,12 @@
                 <div class="mb-3">
                     <label class="form-label">Total Harga:</label>
                     <input type="text" id="totalPrice" class="form-control" readonly>
+                </div>
+
+                <!-- Input tanggal -->
+                <div class="mb-3">
+                    <label for="tanggal">Tanggal:</label>
+                    <input type="date" id="tanggal" name="tanggal" required />
                 </div>
 
                 <button type="submit" class="btn btn-primary">Simpan</button>
@@ -94,15 +102,15 @@
                     <th>Mekanik</th>
                     <th>Total Biaya</th>
                     <th>Tanggal</th>
-                    <th>Aksi</th>
+                    <!--- <th>Aksi</th> --->
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="layanan : ${layananList}">
                     <td th:text="${layanan.customer.nama}"></td>
-                    <td th:text="${layanan.layananType}"></td>
+                    <td th:text="${layanan.jenisLayanan}"></td>
                     <td>
-                        <span th:each="produk : ${layanan.produkList}" th:text="${produk.nama} + ' (' + produk.jumlah + ')'"></span>
+                    <span th:each="produkItem : ${layanan.layananProdukList}" th:text="${produkItem.produk.nama} + ' (' + ${produkItem.jumlah} + ')'"></span>
                     </td>
                     <td th:text="${layanan.customer.mekanik.nama != null ? layanan.customer.mekanik.nama : 'Belum Dipilih'}"></td>
                     <td th:text="${layanan.totalBiaya}"></td>
@@ -134,29 +142,29 @@
             if (selectedLayanan === 'ringan') {
                 var layanan = `
                     <div class="form-group">
-                        <label for="layananDetail">Pilih Cakupan Servis Ringan</label>
+                        <label for="layananDetail">Pilih Cakupan Servis Ringan (Pilih Satu)</label>
                         <div class="form-check">
-                            <input type="checkbox" name="layananDetails[]" value="Pemasangan Aksesoris" class="form-check-input">
+                            <input type="radio" name="layananDetails[]" value="Pemasangan Aksesoris" class="form-check-input">
                             <label class="form-check-label">Pemasangan Aksesoris (Rp 100.000)</label>
                         </div>
                         <div class="form-check">
-                            <input type="checkbox" name="layananDetails[]" value="Pengecekan Kelistrikan" class="form-check-input">
+                            <input type="radio" name="layananDetails[]" value="Pengecekan Kelistrikan" class="form-check-input">
                             <label class="form-check-label">Pengecekan Kelistrikan (Rp 150.000)</label>
                         </div>
                         <div class="form-check">
-                            <input type="checkbox" name="layananDetails[]" value="Pengecekan Transmisi" class="form-check-input">
+                            <input type="radio" name="layananDetails[]" value="Pengecekan Transmisi" class="form-check-input">
                             <label class="form-check-label">Pengecekan Transmisi (Rp 200.000)</label>
                         </div>
                         <div class="form-check">
-                            <input type="checkbox" name="layananDetails[]" value="Pengecekan Rem" class="form-check-input">
+                            <input type="radio" name="layananDetails[]" value="Pengecekan Rem" class="form-check-input">
                             <label class="form-check-label">Pengecekan Rem (Rp 120.000)</label>
                         </div>
                         <div class="form-check">
-                            <input type="checkbox" name="layananDetails[]" value="Pengecekan Mesin" class="form-check-input">
+                            <input type="radio" name="layananDetails[]" value="Pengecekan Mesin" class="form-check-input">
                             <label class="form-check-label">Pengecekan Mesin (Rp 250.000)</label>
                         </div>
                         <div class="form-check">
-                            <input type="checkbox" name="layananDetails[]" value="Perawatan Kendaraan" class="form-check-input">
+                            <input type="radio" name="layananDetails[]" value="Perawatan Kendaraan" class="form-check-input">
                             <label class="form-check-label">Perawatan Kendaraan (Rp 300.000)</label>
                         </div>
                     </div>
@@ -165,21 +173,21 @@
             } else if (selectedLayanan === 'full') {
                 var layanan = `
                     <div class="form-group">
-                        <label for="layananDetail">Pilih Cakupan Servis Full</label>
+                        <label for="layananDetail">Pilih Cakupan Servis Full (Pilih Satu)</label>
                         <div class="form-check">
-                            <input type="checkbox" name="layananDetails[]" value="Pengecekan & Perbaikan Kelistrikan" class="form-check-input">
+                            <input type="radio" name="layananDetails[]" value="Pengecekan & Perbaikan Kelistrikan" class="form-check-input">
                             <label class="form-check-label">Pengecekan & Perbaikan Kelistrikan (Rp 500.000)</label>
                         </div>
                         <div class="form-check">
-                            <input type="checkbox" name="layananDetails[]" value="Pengecekan & Perbaikan Transmisi" class="form-check-input">
+                            <input type="radio" name="layananDetails[]" value="Pengecekan & Perbaikan Transmisi" class="form-check-input">
                             <label class="form-check-label">Pengecekan & Perbaikan Transmisi (Rp 600.000)</label>
                         </div>
                         <div class="form-check">
-                            <input type="checkbox" name="layananDetails[]" value="Pengecekan & Perbaikan Sistem Pengereman" class="form-check-input">
+                            <input type="radio" name="layananDetails[]" value="Pengecekan & Perbaikan Sistem Pengereman" class="form-check-input">
                             <label class="form-check-label">Pengecekan & Perbaikan Sistem Pengereman (Rp 450.000)</label>
                         </div>
                         <div class="form-check">
-                            <input type="checkbox" name="layananDetails[]" value="Pengecekan & Perbaikan Mesin" class="form-check-input">
+                            <input type="radio" name="layananDetails[]" value="Pengecekan & Perbaikan Mesin" class="form-check-input">
                             <label class="form-check-label">Pengecekan & Perbaikan Mesin (Rp 800.000)</label>
                         </div>
                     </div>
@@ -276,20 +284,15 @@
         });
     });
 </script>
-<<script>
+<script>
     $(document).ready(function () {
-        // Event listener untuk tombol "Tambah Produk"
         $('#addProduct').on('click', function () {
-            // Kosongkan daftar produk sebelum memuat ulang
             $('#productList').empty();
-
-            // Panggil endpoint untuk mendapatkan daftar produk
             $.ajax({
-                url: '/layanan/produk/list', // Endpoint untuk mendapatkan produk
+                url: '/layanan/produk/list',
                 method: 'GET',
                 success: function (data) {
                     if (data.length > 0) {
-                        // Iterasi data produk dan tambahkan ke daftar
                         data.forEach(function (produk) {
                             $('#productList').append(`
                                 <div class="d-flex align-items-center mb-3">
@@ -298,19 +301,38 @@
                                         <strong>${produk.nama}</strong> <br>
                                         <small>Harga: Rp ${produk.harga.toLocaleString('id-ID')}</small>
                                     </div>
-                                    <input type="number" name="produk[${produk.id}]" min="1" max="${produk.stok}" class="form-control ml-3" placeholder="Jumlah">
+                                    <input type="number" class="produk-qty form-control ml-3" data-id="${produk.id}" min="1" max="${produk.stok}" placeholder="Jumlah">
                                 </div>
                             `);
                         });
                     } else {
-                        // Jika tidak ada produk
                         $('#productList').append('<p class="text-muted">Tidak ada produk yang tersedia.</p>');
                     }
                 },
                 error: function () {
-                    alert('Gagal memuat daftar produk. Pastikan server berjalan dengan benar.');
+                    alert('Gagal memuat daftar produk.');
                 }
             });
+        });
+
+        $(document).on('input', '.produk-qty', function () {
+            let selectedProduk = [];
+            $('.produk-qty').each(function () {
+                let qty = $(this).val();
+                let id = $(this).data('id');
+                if (qty > 0) {
+                    selectedProduk.push(`${id}:${qty}`);
+                }
+            });
+            $('#produkIds').val(selectedProduk.join(',')); // Format: "produk_id:jumlah,produk_id:jumlah"
+        });
+
+        $('#submitForm').on('submit', function () {
+            let produkValue = $('#produkIds').val();
+            if (!produkValue) {
+                alert("Harap pilih minimal satu produk!");
+                return false;
+            }
         });
     });
 </script>
