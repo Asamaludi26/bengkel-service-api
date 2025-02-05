@@ -2,11 +2,8 @@ package com.bengkelservice.model;
 
 import jakarta.persistence.*;
 
-import java.util.List;
-import com.bengkelservice.model.PenjualanProduk;
-
-
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 public class Layanan {
@@ -16,23 +13,25 @@ public class Layanan {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 
     private String jenisLayanan;
-
     private String layananType;
-
-    @ManyToMany
-    private List<PenjualanProduk> produkList;
-
-    private Integer totalBiaya;
-
+    private int totalBiaya;
     private LocalDate tanggal;
 
-    // Getter dan Setter
-    public Long getMekanikId() {
-        // Mengambil mekanikId langsung dari customer
-        return customer != null ? customer.getMekanikId() : null;
+    @OneToMany(mappedBy = "layanan", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<LayananProduk> layananProdukList;
+
+    // Constructor, Getter, dan Setter
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Customer getCustomer() {
@@ -59,19 +58,11 @@ public class Layanan {
         this.layananType = layananType;
     }
 
-    public List<PenjualanProduk> getProdukList() {
-        return produkList;
-    }
-
-    public void setProdukList(List<PenjualanProduk> produkList) {
-        this.produkList = produkList;
-    }
-
-    public Integer getTotalBiaya() {
+    public int getTotalBiaya() {
         return totalBiaya;
     }
 
-    public void setTotalBiaya(Integer totalBiaya) {
+    public void setTotalBiaya(int totalBiaya) {
         this.totalBiaya = totalBiaya;
     }
 
@@ -81,5 +72,13 @@ public class Layanan {
 
     public void setTanggal(LocalDate tanggal) {
         this.tanggal = tanggal;
+    }
+
+    public List<LayananProduk> getLayananProdukList() {
+        return layananProdukList;
+    }
+
+    public void setLayananProdukList(List<LayananProduk> layananProdukList) {
+        this.layananProdukList = layananProdukList;
     }
 }

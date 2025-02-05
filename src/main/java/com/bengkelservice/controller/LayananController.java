@@ -2,22 +2,26 @@ package com.bengkelservice.controller;
 
 import com.bengkelservice.model.Layanan;
 import com.bengkelservice.model.Customer;
+import com.bengkelservice.model.LayananProduk;
 import com.bengkelservice.model.PenjualanProduk;
 import com.bengkelservice.service.LayananService;
 import com.bengkelservice.repository.LayananRepository;
+import com.bengkelservice.repository.LayananProdukRepository;
 import com.bengkelservice.service.CustomerService;
 import com.bengkelservice.service.MekanikService;
 import com.bengkelservice.service.PenjualanProdukService;
+import com.bengkelservice.service.LayananProdukService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.text.NumberFormat;
+import java.util.Collections;
 import java.util.Locale;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDate;
 
 @Controller
 @RequestMapping("/layanan")
@@ -25,6 +29,9 @@ public class LayananController {
 
     @Autowired
     private LayananService layananService;
+
+    @Autowired
+    private LayananProdukService layananProdukService;
 
     @Autowired
     private PenjualanProdukService penjualanProdukService;
@@ -37,20 +44,32 @@ public class LayananController {
 
     @GetMapping("/all")
     public String showAllLayanan(Model model) {
-        // Retrieve all customers from the database
         List<Customer> customerList = customerService.getAllCustomer();
-        model.addAttribute("customerList", customerList);  // Send customerList to the view
-        // Ambil semua layanan dari service
+        model.addAttribute("customerList", customerList);
+
         List<Layanan> layananList = layananService.getAllLayanan();
-        System.out.println("Layanan List: " + layananList); // Debug data
-        // Tambahkan layananList ke model
+        for (Layanan layanan : layananList) {
+            List<LayananProduk> layananProdukList = layananService.getProdukByLayanan(layanan.getId());
+            layanan.setLayananProdukList(layananProdukList);
+        }
+
         model.addAttribute("layananList", layananList);
-        model.addAttribute("layanan", new Layanan()); // Tambahkan atribut 'layanan'
-        // Kembalikan nama view yang sesuai (layanan.html)
+        model.addAttribute("layanan", new Layanan());
         return "layanan";
     }
 
-        // Menampilkan form layanan
+    // Endpoint untuk mendapatkan layanan berdasarkan ID
+    @GetMapping("/{id}")
+    public ResponseEntity<List<Layanan>> getLayananById(@PathVariable Long id) {
+        Layanan layanan = layananService.getLayananById(id);
+        if (layanan != null) {
+            return ResponseEntity.ok(List.of(layanan)); // Ubah ke List.of()
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // Menampilkan form layanan
         @GetMapping
         public String showLayananForm(Model model) {
             // Fetch all customers
@@ -79,115 +98,92 @@ public class LayananController {
             return "layanan";
         }
 
-        // Menyimpan data layanan dan menghitung total biaya
-        @PostMapping("/save")
-        public String addLayanan(@RequestParam("layananType") String layananType,
-                                 @RequestParam("customerId") Long customerId,
-                                 @RequestParam(value = "layananDetails[]", required = false) String[] layananDetails,
-                                 @RequestParam(value = "produkIds[]", required = false) List<Long> produkIds,
-                                 Model model) {
+    @PostMapping("/save")
+    public String addLayanan(@RequestParam("layananType") String layananType,
+                             @RequestParam("customerId") Long customerId,
+                             @RequestParam(value = "layananDetails[]", required = false) String[] layananDetails,
+                             @RequestParam(value = "produkIds", required = false) String produkData,
+                             @RequestParam("tanggal") String tanggalInput, // Tambahkan parameter untuk tanggal
+                             Model model) {
 
-            List<Layanan> layananList = new ArrayList<>();
-            int totalPrice = 0;
+        List<Layanan> layananList = new ArrayList<>();
+        int totalBiaya = 0; // Total biaya yang akan dihitung
 
-            // Menentukan harga layanan berdasarkan pilihan
-            if (layananDetails != null) {
-                for (String layananDetail : layananDetails) {
-                    Layanan layanan = new Layanan();
-                    layanan.setJenisLayanan(layananDetail);
-                    layanan.setLayananType(layananType);
+        // Parse tanggal dari input string menjadi objek Date
+        LocalDate tanggal = LocalDate.parse(tanggalInput);
 
-                    int harga = 0;
-                    switch (layananDetail) {
-                        case "Pemasangan Aksesoris":
-                            harga = 100000;
-                            break;
-                        case "Pengecekan Kelistrikan":
-                            harga = 150000;
-                            break;
-                        case "Pengecekan Transmisi":
-                            harga = 200000;
-                            break;
-                        case "Pengecekan Rem":
-                            harga = 120000;
-                            break;
-                        case "Pengecekan Mesin":
-                            harga = 250000;
-                            break;
-                        case "Perawatan Kendaraan":
-                            harga = 300000;
-                            break;
-                        case "Pengecekan & Perbaikan Kelistrikan":
-                            harga = 500000;
-                            break;
-                        case "Pengecekan & Perbaikan Transmisi":
-                            harga = 600000;
-                            break;
-                        case "Pengecekan & Perbaikan Sistem Pengereman":
-                            harga = 450000;
-                            break;
-                        case "Pengecekan & Perbaikan Mesin":
-                            harga = 800000;
-                            break;
-                    }
-                    totalPrice += harga;
-                    layanan.setTotalBiaya(harga);
-                    layananList.add(layanan);
-                }
+        // Step 1: Menghitung total biaya layanan berdasarkan jenis layanan
+        if (layananDetails != null) {
+            for (String layananDetail : layananDetails) {
+                Layanan layanan = new Layanan();
+                layanan.setJenisLayanan(layananDetail);
+                layanan.setLayananType(layananType);
+                layanan.setTanggal(tanggal); // Set tanggal pada layanan
+
+                // Harga berdasarkan jenis layanan
+                int hargaLayanan = switch (layananDetail) {
+                    case "Pemasangan Aksesoris" -> 100000;
+                    case "Pengecekan Kelistrikan" -> 150000;
+                    case "Pengecekan Transmisi" -> 200000;
+                    case "Pengecekan Rem" -> 120000;
+                    case "Pengecekan Mesin" -> 250000;
+                    case "Perawatan Kendaraan" -> 300000;
+                    case "Pengecekan & Perbaikan Kelistrikan" -> 500000;
+                    case "Pengecekan & Perbaikan Transmisi" -> 600000;
+                    case "Pengecekan & Perbaikan Sistem Pengereman" -> 450000;
+                    case "Pengecekan & Perbaikan Mesin" -> 800000;
+                    default -> 0;
+                };
+
+                totalBiaya += hargaLayanan; // Tambahkan biaya layanan ke total biaya
+                layanan.setTotalBiaya(hargaLayanan); // Set total biaya pada layanan
+
+                // Simpan layanan terlebih dahulu
+                layananService.saveLayanan(layanan);
+                layananList.add(layanan);
             }
-
-            // Menambahkan harga produk jika ada
-            PenjualanProduk produk = null;
-            if (produkIds != null) {
-                for (Long produkId : produkIds) {
-                    produk = penjualanProdukService.getProdukById(produkId);
-                    totalPrice += produk.getHarga();
-                }
-            }
-
-            // Format totalPrice sebagai mata uang (Rp)
-            NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
-            String formattedTotalPrice = currencyFormat.format(totalPrice);
-
-            // Retrieve customer dari ID
-            Customer customer = customerService.getCustomerById(customerId);
-            if (customer == null) {
-                throw new IllegalArgumentException("Customer tidak ditemukan!");
-            }
-
-            // Set customer ke layanan
-            for (Layanan layanan : layananList) {
-                layanan.setCustomer(customer); // MekanikId bisa diakses melalui relasi ke Customer
-            }
-
-            layananService.saveLayanan(layananList); // Simpan layanan ke database
-
-            // Tambahkan atribut ke model untuk view
-            model.addAttribute("customers", customerService.getAllCustomer());
-            model.addAttribute("jenisLayanan", List.of(
-                    "Pemasangan Aksesoris",
-                    "Pengecekan Kelistrikan",
-                    "Pengecekan Transmisi",
-                    "Pengecekan Rem",
-                    "Pengecekan Mesin",
-                    "Perawatan Kendaraan",
-                    "Pengecekan & Perbaikan Kelistrikan",
-                    "Pengecekan & Perbaikan Transmisi",
-                    "Pengecekan & Perbaikan Sistem Pengereman",
-                    "Pengecekan & Perbaikan Mesin"
-            ));
-            model.addAttribute("produkList", penjualanProdukService.getAllProduk());
-            model.addAttribute("customer", customer);
-            model.addAttribute("totalPrice", formattedTotalPrice);
-            model.addAttribute("layananList", layananList);
-
-            // Proses data yang masuk
-            System.out.println("Jenis Layanan: " + layananType);
-            System.out.println("Customer ID: " + customerId);
-            System.out.println("Produk: " + produk); // Produk dan jumlahnya
-
-            return "redirect:/layanan/all";
         }
+
+        // Step 2: Menambahkan produk yang dibeli ke total biaya layanan
+        if (produkData != null && !produkData.isEmpty()) {
+            String[] produkItems = produkData.split(",");
+            for (String item : produkItems) {
+                String[] split = item.split(":");
+                Long produkId = Long.parseLong(split[0]);
+                int jumlah = Integer.parseInt(split[1]);
+
+                // Ambil harga produk berdasarkan ID
+                PenjualanProduk produk = penjualanProdukService.getProdukById(produkId);
+                if (produk != null) {
+                    totalBiaya += produk.getHarga() * jumlah; // Tambahkan harga produk yang dibeli
+                }
+
+                // Simpan data LayananProduk (produk yang dibeli)
+                LayananProduk layananProduk = new LayananProduk();
+                layananProduk.setLayanan(layananList.get(0)); // Set layanan untuk layananProduk
+                layananProduk.setProduk(produk);
+                layananProduk.setJumlah(jumlah);
+
+                // Simpan LayananProduk setelah layanan disimpan
+                layananProdukService.saveLayananProduk(layananProduk);
+            }
+        }
+
+        // Step 3: Pastikan total biaya diperbarui dengan benar
+        Customer customer = customerService.getCustomerById(customerId);
+        if (customer == null) {
+            throw new IllegalArgumentException("Customer tidak ditemukan!");
+        }
+
+        for (Layanan layanan : layananList) {
+            layanan.setCustomer(customer);
+            layanan.setTotalBiaya(totalBiaya); // Update total biaya layanan
+            layanan.setTanggal(tanggal); // Set tanggal pada layanan
+            layananService.saveLayanan(layanan); // Simpan layanan dengan total biaya dan tanggal yang benar
+        }
+
+        return "redirect:/layanan/all"; // Redirect ke halaman setelah berhasil menyimpan
+    }
 
     // Endpoint untuk mendapatkan daftar produk
     @GetMapping("/produk/list")
@@ -209,17 +205,6 @@ public class LayananController {
     public ResponseEntity<String> deleteLayanan(@PathVariable Long id) {
         layananService.deleteLayananById(id);
         return ResponseEntity.ok("Layanan berhasil dihapus.");
-    }
-
-    // Endpoint untuk mendapatkan layanan berdasarkan ID
-    @GetMapping("/{id}")
-    public ResponseEntity<Layanan> getLayananById(@PathVariable Long id) {
-        Layanan layanan = layananService.getLayananById(id);
-        if (layanan != null) {
-            return ResponseEntity.ok(layanan);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
     }
 
     // Endpoint untuk memperbarui data layanan
