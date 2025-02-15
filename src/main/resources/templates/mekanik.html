@@ -83,6 +83,11 @@
 
     <!-- Tabel Data Mekanik -->
     <h2 class="mt-4">Data Mekanik</h2>
+    <div class="d-flex justify-content-between mb-3">
+        <button type="button" class="btn btn-success" onclick="printPdf('mekanik')">
+            <i class="fas fa-print"></i> Print Data
+        </button>
+    </div>
 
     <!-- Box Peringatan jika Data Mekanik Kosong -->
     <div th:if="${#lists.isEmpty(mekaniklist)}" class="alert alert-warning">
@@ -124,6 +129,11 @@
 <!-- Skrip Eksternal -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function printPdf(type) {
+        window.open('/pdf/' + type, '_blank');
+    }
+</script>
 <script>
     // Fungsi Reset Button
     document.getElementById('resetButton').addEventListener('click', function () {

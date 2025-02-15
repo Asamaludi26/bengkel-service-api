@@ -9,6 +9,7 @@ import com.bengkelservice.repository.MekanikRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.text.NumberFormat;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -39,6 +40,10 @@ public class LayananService {
     public Layanan getLayananById(Long id) {
         Optional<Layanan> layanan = layananRepository.findById(id);
         return layanan.orElse(null);
+    }
+
+    public List<Layanan> findByTanggalBetween(LocalDate startDate, LocalDate endDate) {
+        return layananRepository.findByTanggalBetween(startDate, endDate);
     }
 
     public List<LayananProduk> getProdukByLayanan(Long layananId) {
