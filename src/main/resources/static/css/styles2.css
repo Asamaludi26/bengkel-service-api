@@ -52,8 +52,8 @@ body {
 /* Main content */
 .main-content {
     flex-grow: 1; /* Memastikan konten utama memenuhi ruang kosong */
-    padding: 20px;
-    margin-top: 70px; /* Menyesuaikan posisi setelah navbar */
+    padding: 10px;
+    margin-top: 10px; /* Menyesuaikan posisi setelah navbar */
 }
 
 /* Dashboard styles */
